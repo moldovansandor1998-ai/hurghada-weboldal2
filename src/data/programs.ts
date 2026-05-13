@@ -101,70 +101,118 @@ Gyermekek:
   },
   {
     id: 'kairo-piramisok-szfinx',
-    name: 'Kairó kirándulás – Piramisok és Szfinx',
+    name: 'Kairó – Piramisok & Old Museum',
     category: 'varosnezes',
     price: 65,
     childPrice: '40€ (5–11 év)',
     image: '/images/kairo-piramisok.jpg',
-    tagline: 'Fedezd fel Kairó ikonikus látnivalóit egyetlen nap alatt – piramisok, Szfinx és az ókori Egyiptom csodái.',
+    tagline: 'A klasszikus kairói élmény magyar idegenvezetéssel – piramisok, Szfinx és az ókori Egyiptom története.',
     highlight: 'Piramisok + Szfinx + Egyiptomi Múzeum',
-    duration: 'Indulás: kb. 01:00–02:00, Visszaérkezés: kb. 22:00–23:00',
+    duration: 'Indulás: kb. 01:00–02:00, Visszaérkezés: kb. 20:00–21:00',
     availability: 'Minden nap',
-    guideInfo: '15 fő felett magyar idegenvezető\nKisebb csoportnál angol / német nyelvű idegenvezetés',
-    fullDescription: `Teljes napos kairói kirándulás Hurghadából, kényelmes transzferrel.
+    guideInfo: '15 fő felett magyar idegenvezető – teljesen privát túra\nKisebb csoportnál angol / német nyelvű idegenvezetés',
+    fullDescription: `Ez a program a hagyományos, ikonikus kairói élményt kínálja azok számára, akik szeretnék valóban megérteni azt, amit látnak. A privát transzfernek köszönhetően a nap kényelmesen, szervezetten és kiszámíthatóan telik, a magyar idegenvezetés pedig biztosítja, hogy a történelem ne csak látvány, hanem élő történet legyen. A program 15 fő felett magyar nyelvű idegenvezetővel, teljesen privát formában zajlik.
 
 
-Kora hajnalban indulunk – kb. 01:00–02:00 között jövünk érted a szállodához.
-A buszút Kairóba kb. 6–7 óra, közben pihenhetsz vagy nézheted a sivatagi tájat.
+Az első állomás a Gízai piramisok fennsíkja, ahol a Kheopsz-, Khephrén- és Mükerinosz-piramis monumentális tömbjei magasodnak a sivatag fölé. A helyszínen elegendő idő áll rendelkezésre fotózásra és a részletek megfigyelésére, miközben magyar nyelven hallhatod a piramisok építésével, funkciójával és történelmi jelentőségével kapcsolatos legfontosabb tudnivalókat.
 
 
-Megérkezés után egyből a világhírű piramisokhoz megyünk.
-Itt szabadidőd is lesz fotózni – itt készülnek a legjobb képek.
+A piramisok közelében található a legendás Szfinx, amely évezredek óta őrzi a fennsíkot. Itt szintén lehetőség van kényelmes tempóban körbejárni és megörökíteni az élményt.
 
 
-Ezután a híres Szfinx következik – egy hatalmas, ikonikus szobor, amit élőben látni egészen más élmény.
+A program következő része a híres Egyiptomi Múzeum (Old Museum) meglátogatása. A múzeum termeiben az ókori Egyiptom legértékesebb relikviái sorakoznak: fáraók szobrai, aranykincsek, sírmellékletek és mindennapi használati tárgyak. A magyar idegenvezetés különösen nagy hozzáadott értéket jelent itt, hiszen a kiállítási tárgyak mögötti történetek, összefüggések és érdekességek érthetően, élményszerűen kelnek életre.
 
 
-A világ egyik legismertebb látványossága vár rád:
-• Kheopsz, Khephrén és Mükerinosz piramisai
+A program tartalmaz ebédet, valamint vásárlási lehetőséget megbízható helyszíneken. Igény esetén opcionális nílusi hajókázás is kérhető, amely különleges perspektívából mutatja meg Kairót, és kellemes lezárása lehet a tartalmas napnak.
 
 
-Ebéd egy helyi étteremben – büfé rendszerben.
+Ez a túra ideális azoknak, akik a klasszikus kairói látnivalókat szeretnék kényelmes, magyar nyelvű kísérettel felfedezni.
 
 
-Délután ellátogatunk az Egyiptomi Múzeumba, ahol több ezer éves kincseket láthatsz, többek között Tutanhamon leleteit.
-
-
-Ha szeretnéd, lehetőség van papirusz és parfüm műhely meglátogatására is.
-
-
-Késő délután indulunk vissza Hurghadába.
-Érkezés kb. 22:00–23:00 között.
-
-Egy nap, amit nem fogsz elfelejteni.
+Egy nap, amit nem fogsz elfelejteni:
+• Gízai Piramisok
+• Szfinx
+• Egyiptomi Old Museum
+• Ebéd
+• Shopping lehetőség
+• Opcionális: Nílusi hajókázás
 
 
 A program sorrendje változhat az időjárástól és az aktuális helyzettől függően.
 
 
 Az ár tartalmazza:
-– Hotel–hotel transzfer
+– Privát légkondícionált transzfer oda-vissza
 – Piramisok belépő
 – Szfinx belépő
 – Egyiptomi Múzeum belépő
-– Ebéd (büfé)
-– Idegenvezetés
+– Ebéd
+– Magyar idegenvezetés (15 fő felett)
 
 
 Az ár nem tartalmazza:
 – Italok
 – Piramis belső belépő (opcionális)
+– Nílusi hajókázás (opcionális)
 – Személyes költőpénz
 
 
 Gyermekek:
 – 5 éves korig ingyenes
 – 5–11 éves korig kedvezményes ár (40€)`,
+  },
+  {
+    id: 'kairo-gem',
+    name: 'Kairó – Piramisok & Grand Egyptian Museum (GEM)',
+    category: 'varosnezes',
+    price: 95,
+    image: '/images/kairo-gem.jpg',
+    tagline: 'VIP kairói élmény a világ legmodernebb múzeumával – piramisok, Szfinx és a Grand Egyptian Museum.',
+    highlight: 'Piramisok + Szfinx + Grand Egyptian Museum',
+    duration: 'Indulás: kb. 01:00–02:00, Visszaérkezés: kb. 22:00',
+    availability: 'Minden nap',
+    guideInfo: '15 fő felett magyar idegenvezető – teljesen privát túra\nKisebb csoportnál angol / német nyelvű idegenvezetés',
+    fullDescription: `A VIP Kairó program azoknak készült, akik a klasszikus és a modern Egyiptomot egyszerre szeretnék felfedezni, kényelmes, privát formában. A saját transzfernek köszönhetően a nap gördülékenyen, rugalmas tempóban zajlik, míg a magyar idegenvezetés biztosítja, hogy a látottak valódi történelmi tartalommal teljenek meg. A program 15 fő felett magyar nyelvű idegenvezetővel, teljesen privát formában zajlik.
+
+
+Az első állomás a Gízai piramisok fennsíkja, ahol a Kheopsz-, Khephrén- és Mükerinosz-piramis monumentális látványa fogad. A helyszínen nem csupán fotózunk, hanem betekintést kapunk az építésükhöz kapcsolódó elméletekbe, a fáraók világába és az ókori mérnöki zsenialitásba. A piramisok lábánál őrzi a fennsíkot a legendás Szfinx, amely az egyiptomi civilizáció egyik legismertebb szimbóluma.
+
+
+A nap második kiemelt állomása a lenyűgöző Grand Egyptian Museum (GEM), amely a világ egyik legnagyobb és legmodernebb múzeuma. Az impozáns épület már önmagában is látványosság, gyűjteménye pedig páratlan: monumentális szobrok, királyi relikviák és az ókori Egyiptom eddig soha nem látott módon bemutatott öröksége vár. A modern kiállítótér és a letisztult installációk teljesen új szintre emelik a múzeumlátogatás élményét.
+
+
+A program része az ebéd, valamint igény szerint vásárlási lehetőség megbízható helyszíneken. Opcionálisan nílusi hajókázás is kérhető, amely különleges perspektívából mutatja meg Kairó városát, és elegáns lezárása lehet a napnak.
+
+
+Ez a túra ideális választás azok számára, akik prémium, átgondolt és tartalmas kairói élményre vágynak, magyar nyelvű szakmai kísérettel.
+
+
+Egy felejthetetlen nap vár rád:
+• Gízai Piramisok
+• Szfinx
+• Grand Egyptian Museum (GEM)
+• Ebéd
+• Shopping lehetőség
+• Opcionális: Nílusi hajókázás
+
+
+A program sorrendje változhat az időjárástól és az aktuális helyzettől függően.
+
+
+Az ár tartalmazza:
+– Privát légkondícionált transzfer oda-vissza
+– Piramisok belépő
+– Szfinx belépő
+– Grand Egyptian Museum belépő
+– Ebéd
+– Magyar idegenvezetés (15 fő felett)
+
+
+Az ár nem tartalmazza:
+– Italok
+– Piramis belső belépő (opcionális)
+– Nílusi hajókázás (opcionális)
+– Személyes költőpénz`,
   },
   {
     id: 'orange-bay',
@@ -220,6 +268,57 @@ Az ár nem tartalmazza:
 
 Gyermekek:
 – 5 éves korig ingyenes`,
+  },
+  {
+    id: 'orange-bay-megawish',
+    name: 'Orange Bay & Megawish Island – Hajós kirándulás',
+    category: 'tengeri',
+    price: 38,
+    image: '/images/orange-bay-megawish.jpg',
+    tagline: 'Két sziget egy nap alatt – Orange Bay és Megawish Island snorkelinggel, ebéddel és italokkal.',
+    duration: '08:00 – 18:00',
+    availability: 'Minden nap',
+    highlight: '2 sziget (Orange Bay + Megawish) + 1 snorkeling megálló + Ebéd és italok',
+    fullDescription: `Két paradicsomi sziget egyetlen nap alatt – a Vörös-tenger legnépszerűbb hajós kirándulása!
+
+
+Reggel kb. 08:00 körül érkezik a transzfer a szállodához, majd a kikötőbe viszünk. Innen indul a hajó a Vörös-tengerre.
+
+
+Az első megálló egy snorkeling helyszín, ahol a Vörös-tenger színes élővilágát és korallzátonyait fedezheted fel. A víz kristálytiszta, a halak színesek – ez az élmény már önmagában megér egy kirándulást.
+
+
+Ezután megérkezünk az Orange Bay szigetre, ahol kb. 1,5 óra szabadidő áll rendelkezésedre. Fürdés a sekély, türkiz vízben, pihenés a fehér homokos parton, napozás és fotózás – igazi paradicsomi élmény.
+
+
+A második sziget a Megawish Island, ahol szintén kb. 1,5 órát tölthetsz. Ez a sziget egyedülálló hangulatával és gyönyörű strandjával vár – tökéletes hely a pihenésre, fürödésre és a Vörös-tenger szépségének élvezetére.
+
+
+A hajón ebédet és italokat (meleg és hideg üdítők) is biztosítunk, így a nap során minden kényelmedről gondoskodunk.
+
+
+Egy nap, ami a nyaralás egyik legjobb élménye lesz:
+• 1 snorkeling megálló
+• 1,5 óra Orange Bay szigetén
+• 1,5 óra Megawish Island szigetén
+• Ebéd és italok a hajón
+• Fehér homokos part és türkiz víz
+
+
+A program sorrendje változhat az időjárástól és az aktuális helyzettől függően.
+
+
+Az ár tartalmazza:
+– Hotel–hotel transzfer
+– Hajókirándulás
+– 1 snorkeling megálló
+– Teljes snorkeling felszerelés
+– Ebéd a hajón
+– Meleg és hideg üdítők
+
+
+Az ár nem tartalmazza:
+– Személyes költégek`,
   },
   {
     id: 'buvarkirandulas',
@@ -346,12 +445,12 @@ Gyermekek:
     image: '/images/dolphinarium.jpg',
     tagline: 'Rövid, családbarát program Hurghadában, ahol látványos delfin- és oroszlánfóka show-t nézhetsz meg.',
     highlight: 'Delfin show + Oroszlánfóka show',
-    duration: 'Kb. 2–3 óra',
-    availability: 'Naponta 2x (reggel és délután)',
+    duration: 'Transzfer kb. 14:00-kor',
+    availability: 'Minden nap (délután)',
     fullDescription: `Rövid, családbarát program Hurghadában, ahol látványos delfin- és oroszlánfóka show-t nézhetsz meg.
 
 
-A transzfer naponta kétszer indul: reggel kb. 08:00 körül, illetve délután kb. 14:00 körül.
+A transzfer délután kb. 14:00-kor érkezik a szállodához.
 
 
 Felvétel a szállodától, majd transzfer a delfináriumba.
@@ -371,8 +470,7 @@ Egy különleges családi élmény:
 
 
 Indulási idő:
-– Reggeli turnus: kb. 08:00 (transzfer érkezése)
-– Délutáni turnus: kb. 14:00 (transzfer érkezése)
+– Déli turnus: kb. 14:00 (transzfer érkezése)
 
 
 A program sorrendje változhat.
@@ -887,47 +985,51 @@ Fontos információk:
 – Fizetés a program indulásakor`,
   },
   {
-    id: 'nemo-island',
-    name: 'Nemo Island – Naplemente hajós kirándulás',
+    id: 'hula-hula-sziget',
+    name: 'Hula Hula Sziget – Karibi hangulat a Vörös-tengeren',
     category: 'tengeri',
     price: 35,
-    image: '/images/nemo-island.jpg',
-    tagline: 'Különleges hajós kirándulás a Nemo szigetre, snorkelinggel és naplementével a Vörös-tengeren.',
-    duration: '10:00 – 19:00',
+    image: '/images/hula-hula.jpg',
+    tagline: 'Karibi hangulatú szigetpihenés snorkelinggel és vízi játékokkal a Vörös-tengeren.',
+    duration: '08:00 – 17:00',
     availability: 'Minden nap',
-    highlight: '2 snorkeling megálló + Naplemente a tengeren',
-    fullDescription: `Különleges hajós kirándulás a Nemo szigetre, snorkelinggel és naplementével a Vörös-tengeren.
+    highlight: 'Snorkeling + Vízi játékok + Szigetpihenés',
+    fullDescription: `Ha valódi kikapcsolódásra vágysz, távol a zsúfolt partoktól és a rohanós programoktól, a Hula Hula Sziget tökéletes választás. Ez a különleges kis sziget Hurghada közelében a „mezítlábas luxus" életérzést kínálja: természetes környezet, nyugodt atmoszféra és az a fajta szabadság, amit egy tengerparti nyaralástól igazán várunk.
 
 
-Transzfer a szállodából kb. 10:00 körül, majd hajózás a szigetre.
+A program kényelmes indulással kezdődik a szállodádtól, majd hajóra szállunk, és a Vörös-tenger türkiz vizén haladva közelítjük meg a szigetet. Már az út is élmény: napsütés, tengeri szellő és a végtelen kék horizont kísér végig.
 
 
-Snorkeling megállók korallzátonyoknál, majd érkezés a szigetre, ahol pihenhetsz és fürödhetsz.
+Útközben egy sznorkelezési megálló vár, ahol testközelből fedezheted fel a Vörös-tenger híres, színes élővilágát. A korallzátonyok között úszva trópusi halak és kristálytiszta víz vesz körül.
 
 
-Ebéd a hajón, majd naplementés hajózás.
+A szigetre érkezve fehér homokos part, rendezett napágyak, árnyékos pihenők és barátságos, laza hangulat fogad. Itt nincs sietség – a napod a pihenésről szól. Fürödhetsz a sekély, átlátszó vízben, napozhatsz a parton, készíthetsz látványos fotókat a karibi hangulatú háttérrel, vagy egyszerűen csak élvezheted a csendet egy hűsítő ital társaságában.
 
 
-Visszatérés a szállodába kb. 19:00.
+A Hula Hula Sziget program nem az extrém kalandokról szól – hanem a minőségi kikapcsolódásról. Ideális pároknak, baráti társaságoknak és mindenkinek, aki szeretné egy napra teljesen elengedni a hétköznapokat.
 
 
 Egy felejthetetlen élmény vár rád:
-• 2 snorkeling megálló
-• Naplemente a tengeren
+• 1 snorkeling megálló a korallzátonynál
+• Vízi játékok a hajón
+• Kb. 2 óra pihenés a szigeten
+• Fehér homokos part és türkiz víz
 
 
 A program sorrendje változhat.
 
 
 Az ár tartalmazza:
-– Transzfer
+– Légkondícionált transzfer oda-vissza
 – Hajókirándulás
-– Ebéd és italok
 – Snorkeling felszerelés
+– Vízi játékok
+– Ebéd a hajón
+– Hideg és meleg üdítők
 
 
 Az ár nem tartalmazza:
-– Személyes költékek`,
+– Személyes költégek`,
   },
   {
     id: 'mahmya-island',
@@ -1052,11 +1154,11 @@ Az ár nem tartalmazza:
     id: 'snorkeling-teknosokkel',
     name: 'Snorkeling teknősökkel',
     category: 'tengeri',
-    price: 60,
+    price: 90,
     image: '/images/teknos-snorkeling.jpg',
     tagline: 'Snorkeling vadon élő teknősökkel a Vörös-tengerben – egy felejthetetlen élmény.',
     duration: '08:00 – 17:00',
-    availability: 'Minden nap',
+    availability: 'Minden héten hétfő és péntek',
     highlight: 'Teknősök a természetes élőhelyükön + Snorkeling',
     fullDescription: `Snorkeling vadon élő teknősökkel a Vörös-tengerben – egy felejthetetlen élmény.
 
@@ -1091,6 +1193,54 @@ Az ár tartalmazza:
 Az ár nem tartalmazza:
 – Személyes költések`,
   },
+  {
+    id: 'eden-sziget',
+    name: 'Eden Sziget – Instagram-kompatibilis paradicsom',
+    category: 'tengeri',
+    price: 75,
+    image: '/images/eden-sziget.jpg',
+    tagline: 'A Vörös-tenger legfotogénebb szigete – hinták, kilátópontok és türkiz víz.',
+    duration: '08:00 – 16:00',
+    availability: 'Minden nap',
+    highlight: 'Snorkeling + Vízi játékok + Szigetpihenés + Fotózási lehetőségek',
+    fullDescription: `Az Eden Sziget az egyik leglátványosabb és legfotogénebb partszakasz Hurghada közelében – egy igazi „nyári álom" a Vörös-tenger közepén. A sziget modern, laza hangulata és a gondosan kialakított strandrészek miatt különösen népszerű a fiatalos, élményközpontú utazók körében.
+
+
+A program hajózással indul, útközben snorkelezési megállóval, ahol felfedezheted a Vörös-tenger gazdag élővilágát. A korallzátonyok és a színes halak látványa már önmagában különleges élményt nyújt, és tökéletes ráhangolódás a sziget hangulatára.
+
+
+Az Eden Szigetre érkezve körülbelül 4 óra szabadidő áll rendelkezésedre, ami bőséges idő a teljes kikapcsolódásra. Fürödhetsz a sekély, kristálytiszta vízben, napozhatsz a fehér homokos parton, vagy elkészítheted azokat a bizonyos ikonikus fotókat a vízbe épített hintákon és kilátópontokon. A strand klubhangulata egyszerre nyugodt és vibráló – tökéletes kombinációja a pihenésnek és az élménynek.
+
+
+Az ebéd és az üdítők a hajón biztosítottak, így a nap során minden adott a kényelmes, gondtalan kikapcsolódáshoz. Neked csak annyi a dolgod, hogy élvezd a napsütést, a tengert és azt a különleges atmoszférát, ami miatt az Eden Sziget az egyik legtrendibb választás a térségben.
+
+
+Ez a program ideális baráti társaságoknak, pároknak, de bárkinek, aki egy stílusos, mégis természetközeli tengeri élményre vágyik.
+
+
+Egy látványos nap vár rád:
+• 1 snorkeling megálló a korallzátonynál
+• 1 megálló vízi játékokra
+• Kb. 2 óra pihenés a szigeten
+• Vízbe épített hinták és kilátópontok
+• Fehér homokos part és kristálytiszta víz
+
+
+A program sorrendje változhat.
+
+
+Az ár tartalmazza:
+– Légkondícionált transzfer oda-vissza
+– Hajókirándulás
+– Snorkeling felszerelés
+– Ebéd és üdítők a hajón
+– Vízi játékok
+
+
+Az ár nem tartalmazza:
+– Személyes költégek`,
+  },
+
 ];
 
 export const categories = [
@@ -1106,5 +1256,5 @@ export const IMPORTANT_INFO = `– Nincs szükség előre foglalásra
   Revolut / Wise / EUR / USD / EGP készpénz
 – A pontos indulási időt előző este küldjük`;
 
-export const WHATSAPP_NUMBER = '+201276551571';
+export const WHATSAPP_NUMBER = '+36206185741';
 export const FACEBOOK_URL = 'https://www.facebook.com/profile.php?id=61571060835253';

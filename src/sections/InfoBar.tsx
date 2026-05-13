@@ -79,7 +79,7 @@ export default function InfoBar() {
           {/* WhatsApp */}
           <div className="flex items-center gap-2 text-[#64748b] text-xs sm:text-sm">
             <span className="font-semibold text-[#0284c7]">WhatsApp:</span>
-            <span>+20 127 655 1571</span>
+            <span>+36 20 618 5741</span>
           </div>
 
           <span className="hidden sm:inline text-[#cbd5e1]">|</span>
