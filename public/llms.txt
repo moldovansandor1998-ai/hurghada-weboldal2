@@ -1,0 +1,9 @@
+# Hurghada Programok
+
+> Magyar nyelvű hurghadai program- és kirándulásfoglaló oldal. Hajós kirándulások, szigettúrák, szafarik, városnézések, kairói és luxori programok, valamint családi élmények érhetők el.
+
+- Hivatalos oldal: https://www.hurghadaprogramok.hu/
+- Programok: https://www.hurghadaprogramok.hu/programok
+- Nyelv: magyar
+- Helyszín: Hurghada, Egyiptom
+- Foglalás és ügyfélszolgálat: közvetlenül a hivatalos oldalon
