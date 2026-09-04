@@ -5,6 +5,7 @@ export interface Program {
   price: number;
   childPrice?: string;
   image: string;
+  gallery?: string[];
   tagline: string;
   duration: string;
   availability: string;
@@ -268,6 +269,68 @@ Az ár nem tartalmazza:
 
 Gyermekek:
 – 5 éves korig ingyenes`,
+  },
+  {
+    id: 'vip-orange-bay',
+    name: 'VIP Orange Bay – Prémium hajós kirándulás',
+    category: 'tengeri',
+    price: 45,
+    childPrice: '5 éves kor alatt ingyenes',
+    image: '/images/vip-hajo-1.jpg',
+    gallery: [
+      '/images/vip-hajo-1.jpg',
+      '/images/vip-hajo-2.jpg',
+      '/images/vip-hajo-belso-1.jpg',
+      '/images/vip-hajo-belso-2.jpg',
+    ],
+    tagline: 'Az Orange Bay élménye nagyobb, kényelmesebb és luxusabb hajóval, ebéddel és snorkelinggel.',
+    highlight: 'Luxushajó + Snorkeling + Ebéd a hajón + 2 óra a szigeten',
+    duration: '08:00 – 18:00',
+    availability: 'Minden nap',
+    fullDescription: `Éld át az Orange Bay programot prémium kivitelben, egy nagyobb, kényelmesebb és luxusabb hajó fedélzetén.
+
+
+Reggel kb. 08:00 körül érkezik a transzfer a szállodádhoz, majd a kikötőbe viszünk. Innen indulunk a Vörös-tengerre a tágas VIP hajóval, ahol kényelmes belső terek és pihenőhelyek várnak.
+
+
+A nap során snorkeling megállónál fedezheted fel a Vörös-tenger színes korallzátonyait és különleges élővilágát. A snorkeling felszerelést biztosítjuk.
+
+
+Ezután megérkezünk az Orange Bay szigetre, ahol kb. 2 órát tölthetsz. Fürdés, napozás, pihenés és fotózás a fehér homokos parton és a türkizkék vízben.
+
+
+Az ebédet a hajón szolgálják fel, így kényelmes környezetben pihenhetsz és élvezheted a tengeri kilátást.
+
+
+A VIP élmény részei:
+• Nagyobb, luxusabb hajó
+• Snorkeling megálló
+• Teljes snorkeling felszerelés
+• Ebéd a hajón
+• Kb. 2 óra az Orange Bay szigetén
+
+
+Délután visszaindulunk a kikötőbe, majd transzferrel visszaviszünk a szállodádba.
+
+
+A program sorrendje változhat az időjárástól és az aktuális helyzettől függően.
+
+
+Az ár tartalmazza:
+– Hotel–hotel transzfer
+– Prémium hajókirándulás
+– Snorkeling megálló
+– Snorkeling felszerelés
+– Kb. 2 óra az Orange Bay szigetén
+– Ebéd a hajón
+
+
+Az ár nem tartalmazza:
+– Személyes költések
+
+
+Gyermekek:
+– 5 éves kor alatt ingyenes`,
   },
   {
     id: 'orange-bay-megawish',
@@ -1030,6 +1093,68 @@ Az ár tartalmazza:
 
 Az ár nem tartalmazza:
 – Személyes költégek`,
+  },
+  {
+    id: 'vip-hula-hula',
+    name: 'VIP Hula Hula – Prémium hajós kirándulás',
+    category: 'tengeri',
+    price: 50,
+    childPrice: '5 éves kor alatt ingyenes',
+    image: '/images/vip-hajo-2.jpg',
+    gallery: [
+      '/images/vip-hajo-2.jpg',
+      '/images/vip-hajo-1.jpg',
+      '/images/vip-hajo-belso-1.jpg',
+      '/images/vip-hajo-belso-2.jpg',
+    ],
+    tagline: 'A Hula Hula sziget élménye nagyobb, kényelmesebb és luxusabb hajóval, ebéddel és snorkelinggel.',
+    duration: '08:00 – 17:00',
+    availability: 'Minden nap',
+    highlight: 'Luxushajó + Snorkeling + Ebéd a hajón + 2 óra a szigeten',
+    fullDescription: `Éld át a Hula Hula sziget programját VIP kivitelben, egy nagyobb, kényelmesebb és luxusabb hajó fedélzetén.
+
+
+Reggel kb. 08:00 körül érkezik a transzfer a szállodádhoz, majd a kikötőbe viszünk. A tágas VIP hajón kényelmes belső terek és pihenőhelyek teszik még kellemesebbé az utazást.
+
+
+Útközben snorkeling megálló vár, ahol felfedezheted a Vörös-tenger színes korallzátonyait és különleges élővilágát. A snorkeling felszerelést biztosítjuk.
+
+
+A Hula Hula szigetre érkezve kb. 2 órád lesz fürdésre, napozásra, pihenésre és fotózásra a fehér homokos parton, a türkizkék víz mellett.
+
+
+Az ebédet a hajón szolgálják fel, így kényelmes környezetben pihenhetsz és élvezheted a tengeri kilátást.
+
+
+A VIP élmény részei:
+• Nagyobb, luxusabb hajó
+• Snorkeling megálló
+• Teljes snorkeling felszerelés
+• Ebéd a hajón
+• Kb. 2 óra a Hula Hula szigeten
+
+
+Délután visszaindulunk a kikötőbe, majd transzferrel visszaviszünk a szállodádba.
+
+
+A program sorrendje változhat az időjárástól és az aktuális helyzettől függően.
+
+
+Az ár tartalmazza:
+– Hotel–hotel transzfer
+– Prémium hajókirándulás
+– Snorkeling megálló
+– Snorkeling felszerelés
+– Kb. 2 óra a Hula Hula szigeten
+– Ebéd a hajón
+
+
+Az ár nem tartalmazza:
+– Személyes költések
+
+
+Gyermekek:
+– 5 éves kor alatt ingyenes`,
   },
   {
     id: 'mahmya-island',

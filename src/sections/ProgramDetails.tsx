@@ -45,6 +45,20 @@ export default function ProgramDetails({ program, onClose }: ProgramDetailsProps
           </div>
         </div>
 
+        {program.gallery && program.gallery.length > 1 && (
+          <div className="grid grid-cols-4 gap-1.5 bg-white p-2">
+            {program.gallery.map((image, index) => (
+              <img
+                key={image}
+                src={image}
+                alt={`${program.name} – ${index + 1}. kép`}
+                className="h-20 w-full rounded-md object-cover"
+                loading="lazy"
+              />
+            ))}
+          </div>
+        )}
+
         {/* Hot Air Balloon Option */}
         {program.hasBalloonOption && program.balloonPrice && (
           <div className="mx-4 -mt-4 relative z-10">
