@@ -1,9 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Anchor, Sun, Landmark, Users, LayoutGrid } from 'lucide-react';
 import { programs, categories } from '@/data/programs';
-import type { Program } from '@/data/programs';
 import ProgramCard from './ProgramCard';
-import ProgramDetails from './ProgramDetails';
 
 const iconMap: Record<string, React.ElementType> = {
   Anchor,
@@ -12,19 +11,9 @@ const iconMap: Record<string, React.ElementType> = {
   Users,
 };
 
-// Pick first category with programs for initial state
-const getInitialCategory = (): string => {
-  for (const cat of categories) {
-    if (programs.some((p) => p.category === cat.id)) {
-      return cat.id;
-    }
-  }
-  return categories[0].id;
-};
-
 export default function ProgramsSection() {
-  const [activeCategory, setActiveCategory] = useState<string>(getInitialCategory());
-  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+  const navigate = useNavigate();
+  const [activeCategory, setActiveCategory] = useState<string>('all');
 
   const filteredPrograms = activeCategory === 'all'
     ? programs
@@ -82,7 +71,7 @@ export default function ProgramsSection() {
             <ProgramCard
               key={program.id}
               program={program}
-              onDetails={setSelectedProgram}
+              onDetails={(program) => navigate(`/program/${program.id}`)}
               index={idx}
             />
           ))}
@@ -96,13 +85,6 @@ export default function ProgramsSection() {
         )}
       </div>
 
-      {/* Program Details Modal */}
-      {selectedProgram && (
-        <ProgramDetails
-          program={selectedProgram}
-          onClose={() => setSelectedProgram(null)}
-        />
-      )}
     </section>
   );
 }
