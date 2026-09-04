@@ -10,6 +10,7 @@ import BlogList from '@/sections/BlogList';
 import BlogDetail from '@/sections/BlogDetail';
 import OffersSection from '@/sections/OffersSection';
 import FontosInformaciok from '@/pages/FontosInformaciok';
+import ProgramPage from '@/pages/ProgramPage';
 
 function HomePage() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/blog/:slug" element={<BlogDetail />} />
           <Route path="/ajanlatok" element={<OffersSection />} />
           <Route path="/fontos-informaciok" element={<FontosInformaciok />} />
+          <Route path="/program/:programId" element={<ProgramPage />} />
         </Routes>
       </div>
     </HashRouter>
