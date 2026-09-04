@@ -1,4 +1,4 @@
-import { Gift, AlertTriangle, Star } from 'lucide-react';
+import { Gift, AlertTriangle } from 'lucide-react';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 export default function OffersSection() {
@@ -18,7 +18,7 @@ export default function OffersSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-[1200px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-[820px] mx-auto">
 
           {/* OFFER 1: Free Airport Transfer */}
           <div className={`bg-white rounded-2xl border-2 border-[#7dd3fc] shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`} style={{ transitionDelay: '100ms' }}>
@@ -68,30 +68,6 @@ export default function OffersSection() {
               <div className="flex items-start gap-2">
                 <AlertTriangle size={16} className="text-[#f59e0b] mt-0.5 flex-shrink-0" />
                 <p className="text-[#92400e] text-xs leading-relaxed">A 4 program közül a <strong>legolcsóbb</strong> ingyenes</p>
-              </div>
-            </div>
-          </div>
-
-          {/* OFFER 3: 2 Program = Dolphin Show Ingyen */}
-          <div className={`bg-white rounded-2xl border-2 border-[#a78bfa] shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`} style={{ transitionDelay: '300ms' }}>
-            <div className="bg-[#ede9fe] p-5">
-              <h3 className="text-[#7c3aed] font-extrabold text-xl leading-snug mb-2">
-                <span className="mr-1.5">🎁</span>2 PROGRAM = DOLPHIN SHOW INGYEN
-              </h3>
-            </div>
-            <div className="p-5 space-y-4">
-              <div className="bg-[#7c3aed] rounded-xl p-4 text-white text-center">
-                <p className="font-extrabold text-base leading-snug">Bármely 2 különböző programon részt veszel = Dolphin Show INGYEN</p>
-              </div>
-              <p className="text-[#475569] text-sm text-center">Ha nálunk bármely 2 különböző programon részt veszel, ajándékba adjuk a Dolphin Show programunkat <span className="font-bold text-[#7c3aed]">teljesen ingyen</span>.</p>
-              <div className="bg-[#f0fdf4] rounded-lg p-3 border border-[#86efac] text-center">
-                <p className="text-[#15803d] font-bold text-sm">Dolphin Show ára ebben az esetben: <span className="text-lg">0 € / fő</span></p>
-              </div>
-            </div>
-            <div className="mx-5 mb-5 bg-[#fef3c7] rounded-lg p-4 border border-[#fcd34d]">
-              <div className="flex items-start gap-2">
-                <Star size={16} className="text-[#f59e0b] mt-0.5 flex-shrink-0" />
-                <p className="text-[#92400e] text-xs font-bold leading-relaxed">AKCIÓS IDŐSZAK: 2026.08.17–2026.09.30.</p>
               </div>
             </div>
           </div>

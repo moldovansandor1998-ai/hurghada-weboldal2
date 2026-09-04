@@ -10,7 +10,6 @@ import BlogList from '@/sections/BlogList';
 import BlogDetail from '@/sections/BlogDetail';
 import OffersSection from '@/sections/OffersSection';
 import FontosInformaciok from '@/pages/FontosInformaciok';
-import FloatingPromotion from '@/components/FloatingPromotion';
 
 function HomePage() {
   return (
@@ -37,7 +36,6 @@ function App() {
           <Route path="/ajanlatok" element={<OffersSection />} />
           <Route path="/fontos-informaciok" element={<FontosInformaciok />} />
         </Routes>
-        <FloatingPromotion />
       </div>
     </HashRouter>
   );
