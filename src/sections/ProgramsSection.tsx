@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Anchor, Sun, Landmark, Users } from 'lucide-react';
+import { Anchor, Sun, Landmark, Users, LayoutGrid } from 'lucide-react';
 import { programs, categories } from '@/data/programs';
 import type { Program } from '@/data/programs';
 import ProgramCard from './ProgramCard';
@@ -26,7 +26,9 @@ export default function ProgramsSection() {
   const [activeCategory, setActiveCategory] = useState<string>(getInitialCategory());
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
 
-  const filteredPrograms = programs.filter((p) => p.category === activeCategory);
+  const filteredPrograms = activeCategory === 'all'
+    ? programs
+    : programs.filter((p) => p.category === activeCategory);
 
   return (
     <section id="programok" className="py-16 sm:py-20 bg-white">
@@ -43,6 +45,17 @@ export default function ProgramsSection() {
 
         {/* Category Tabs */}
         <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10">
+          <button
+            onClick={() => setActiveCategory('all')}
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-medium text-sm transition-all duration-300 ${
+              activeCategory === 'all'
+                ? 'bg-[#0284c7] text-white shadow-md'
+                : 'bg-[#f1f5f9] text-[#64748b] hover:bg-[#e2e8f0] hover:text-[#1e293b]'
+            }`}
+          >
+            <LayoutGrid size={16} />
+            Összes program
+          </button>
           {categories.map((cat) => {
             const Icon = iconMap[cat.icon];
             const isActive = activeCategory === cat.id;
