@@ -340,7 +340,7 @@ Gyermekek:
     image: '/images/orange-bay-megawish.jpg',
     tagline: 'Két sziget egy nap alatt – Orange Bay és Megawish Island snorkelinggel, ebéddel és italokkal.',
     duration: '08:00 – 18:00',
-    availability: 'Kedd • Csütörtök • Vasárnap',
+    availability: 'Hétfő • Szerda • Péntek',
     highlight: '2 sziget (Orange Bay + Megawish) + 1 snorkeling megálló + Ebéd és italok',
     fullDescription: `Két paradicsomi sziget egyetlen nap alatt – a Vörös-tenger legnépszerűbb hajós kirándulása!
 
