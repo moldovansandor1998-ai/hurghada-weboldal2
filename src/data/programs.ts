@@ -554,7 +554,6 @@ Gyermekek:
 
 
 Fontos információk:
-– Napi 2 indulás
 – Gyerekeknek is ideális`,
   },
   {
