@@ -59,14 +59,16 @@ export default async function handler(req, res) {
     const email = String(req.body?.email || '').trim().toLowerCase()
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json(res,400,{error:'Adj meg érvényes tesztcímet.'})
     recipients=[{email,unsubscribe_token:null}]
+  } else if (mode === 'selected') {
+    const emails = Array.isArray(req.body?.emails) ? req.body.emails : []
+    recipients = [...new Set(emails
+      .map(email => String(email).trim().toLowerCase())
+      .filter(email => /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email))
+    )].slice(0, 100).map(email => ({ email, unsubscribe_token: null }))
   } else {
     const response=await dbFetch('newsletter_subscribers?select=email,unsubscribe_token&status=eq.active&order=created_at.asc&limit=10000',token)
     if(!response.ok) return json(res,500,{error:'A címzettek betöltése nem sikerült.'})
-    const active=await response.json()
-    if(mode==='selected'){
-      const wanted=new Set((Array.isArray(req.body?.emails)?req.body.emails:[]).map(e=>String(e).toLowerCase()))
-      recipients=active.filter(r=>wanted.has(r.email))
-    } else recipients=active
+    recipients=await response.json()
   }
   if(!recipients.length) return json(res,400,{error:'Nincs megfelelő címzett.'})
 
@@ -87,7 +89,7 @@ export default async function handler(req, res) {
     }
     sent+=chunk.length
   }
-  if(mode!=='test'){
+  if(mode==='broadcast'){
     await dbFetch(`newsletter_subscribers?email=in.(${recipients.map(r=>encodeURIComponent(r.email)).join(',')})`,token,{
       method:'PATCH',body:JSON.stringify({last_campaign_at:new Date().toISOString(),updated_at:new Date().toISOString()})
     })
