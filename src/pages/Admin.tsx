@@ -152,23 +152,41 @@ export default function Admin() {
     const controller = new AbortController()
     const timeout = window.setTimeout(() => controller.abort(), 55_000)
     try {
-      const response = await fetch(campaignEndpoint, {
+      const requestBody = JSON.stringify({
+        mode,
+        subject: subject.trim(),
+        message: message.trim(),
+        email: testEmail.trim().toLowerCase(),
+        emails: [...selected],
+      })
+      const sendRequest = (accessToken: string) => fetch(campaignEndpoint, {
         method: 'POST',
         signal: controller.signal,
         headers: {
-          Authorization: `Bearer ${session.access_token}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          mode,
-          subject: subject.trim(),
-          message: message.trim(),
-          email: testEmail.trim().toLowerCase(),
-          emails: [...selected],
-        }),
+        body: requestBody,
       })
+
+      let response = await sendRequest(session.access_token)
+      if (response.status === 401) {
+        const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession()
+        if (refreshError || !refreshed.session?.access_token) {
+          await supabase.auth.signOut()
+          setIsAdmin(false)
+          setNotice('A korábbi belépés lejárt. Jelentkezz be újra az új adminjelszóval.')
+          return
+        }
+        response = await sendRequest(refreshed.session.access_token)
+      }
+
       const result = await response.json().catch(() => ({}))
       if (!response.ok) {
+        if (response.status === 401) {
+          await supabase.auth.signOut()
+          setIsAdmin(false)
+        }
         setNotice(result.error || 'A küldés nem sikerült.')
         return
       }
