@@ -12,7 +12,7 @@ type Subscriber = {
   last_campaign_at: string | null
 }
 
-const campaignEndpoint = '/api/newsletter-proxy'
+const campaignEndpoint = '/api/send-newsletter'
 const adminEmail = 'moldovansandor1998@gmail.com'
 
 const extractEmails = (text: string) => [...new Set(
@@ -42,22 +42,20 @@ export default function Admin() {
   const [importing, setImporting] = useState(false)
   const [importConsent, setImportConsent] = useState(false)
   const [importPreview, setImportPreview] = useState<string[]>([])
+  const [importFileName, setImportFileName] = useState('')
 
   const checkAdmin = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession()
-    if (!session) {
-      setIsAdmin(false)
-      setSessionReady(true)
-      return
-    }
-    const { data } = await supabase.from('profiles').select('is_admin').eq('id', session.user.id).maybeSingle()
-    setIsAdmin(data?.is_admin === true)
+    setIsAdmin(session?.user?.app_metadata?.is_admin === true)
     setSessionReady(true)
   }, [])
 
   useEffect(() => {
-    checkAdmin()
-    const { data } = supabase.auth.onAuthStateChange(() => { void checkAdmin() })
+    void checkAdmin()
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAdmin(session?.user?.app_metadata?.is_admin === true)
+      setSessionReady(true)
+    })
     return () => data.subscription.unsubscribe()
   }, [checkAdmin])
 
@@ -65,7 +63,7 @@ export default function Admin() {
     if (!isAdmin) return
     setLoading(true)
     const { data, error } = await supabase
-      .from('hurghada_newsletter_subscribers')
+      .from('newsletter_subscribers')
       .select('email,status,source,consent_at,unsubscribed_at,created_at,last_campaign_at')
       .order('created_at', { ascending: false })
       .limit(10000)
@@ -114,7 +112,7 @@ export default function Admin() {
 
   const changeStatus = async (email: string, status: Subscriber['status']) => {
     const { error } = await supabase
-      .from('hurghada_newsletter_subscribers')
+      .from('newsletter_subscribers')
       .update({
         status,
         unsubscribed_at: status === 'unsubscribed' ? new Date().toISOString() : null,
@@ -228,7 +226,9 @@ export default function Admin() {
   const chooseImportFile = async (file: File | undefined) => {
     setNotice('')
     setImportPreview([])
+    setImportFileName('')
     if (!file) return
+    setImportFileName(file.name)
     if (!/\.(csv|txt)$/i.test(file.name)) {
       setNotice('Csak CSV vagy TXT fájl tölthető fel.')
       return
@@ -237,7 +237,14 @@ export default function Admin() {
       setNotice('A fájl legfeljebb 10 MB lehet.')
       return
     }
-    const emails = extractEmails(await file.text())
+    let fileText = ''
+    try {
+      fileText = await file.text()
+    } catch {
+      setNotice('A fájlt a böngésző nem tudta beolvasni. Töltsd le a telefonra, majd válaszd ki újra.')
+      return
+    }
+    const emails = extractEmails(fileText)
     if (!emails.length) {
       setNotice('A fájlban nem található érvényes e-mail-cím.')
       return
@@ -268,7 +275,7 @@ export default function Admin() {
         updated_at: now,
       }))
       const { error } = await supabase
-        .from('hurghada_newsletter_subscribers')
+        .from('newsletter_subscribers')
         .upsert(rows, { onConflict: 'email' })
       if (error) {
         setImporting(false)
@@ -306,7 +313,7 @@ export default function Admin() {
           <div className="mb-6 text-center">
             <div className="mx-auto mb-3 grid h-12 w-12 place-items-center rounded-2xl bg-sky-100 text-sky-700"><LogIn /></div>
             <h1 className="text-2xl font-bold text-slate-900">Hurghada admin</h1>
-            <p className="mt-2 text-sm text-slate-500">Jelentkezz be a VagyokRád adminfiókoddal.</p>
+            <p className="mt-2 text-sm text-slate-500">Jelentkezz be a Hurghada Programok adminfiókoddal.</p>
           </div>
           <input type="email" required readOnly value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} placeholder="E-mail-cím" className="mb-3 min-h-12 w-full rounded-xl border bg-slate-50 px-4 text-slate-600" />
           <input type="password" required value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} placeholder="Jelszó" className="mb-3 min-h-12 w-full rounded-xl border px-4" />
@@ -356,7 +363,7 @@ export default function Admin() {
                 <Upload size={18} /> CSV vagy TXT kiválasztása
                 <input type="file" accept=".csv,.txt,text/csv,text/plain" className="hidden" onChange={(e) => void chooseImportFile(e.target.files?.[0])} />
               </label>
-              <span className="text-sm text-slate-600">Maximum 10 000 egyedi e-mail-cím fájlonként.</span>
+              <span className="text-sm text-slate-600">{importFileName ? `Kiválasztva: ${importFileName}` : 'Maximum 10 000 egyedi e-mail-cím fájlonként.'}</span>
             </div>
             {importPreview.length > 0 && (
               <div className="mt-4">
