@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navigation from '@/sections/Navigation';
 import Hero from '@/sections/Hero';
 import InfoBar from '@/sections/InfoBar';
@@ -29,8 +29,13 @@ function HomePage() {
 }
 
 function App() {
+  // A korábbi hash-alapú linkeket egyszer átvezetjük a tiszta URL-re.
+  if (window.location.hash.startsWith('#/')) {
+    window.history.replaceState(null, '', window.location.hash.slice(1))
+  }
+
   return (
-    <HashRouter>
+    <BrowserRouter>
       <div className="min-h-screen bg-white font-sans antialiased">
         <Navigation />
         <Routes>
@@ -43,7 +48,7 @@ function App() {
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </div>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
