@@ -1,5 +1,5 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import { Download, Loader2, LogIn, LogOut, Mail, RefreshCw, Search, Send, Users } from 'lucide-react'
+import { Download, KeyRound, Loader2, LogIn, LogOut, Mail, RefreshCw, Search, Send, Upload, Users } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 type Subscriber = {
@@ -13,11 +13,18 @@ type Subscriber = {
 }
 
 const campaignEndpoint = 'https://vagyokrad.hu/api/hurghada-newsletter'
+const adminEmail = 'moldovansandor1998@gmail.com'
+
+const extractEmails = (text: string) => [...new Set(
+  (text.match(/[^\\s,;<>\"]+@[^\\s,;<>\"]+\\.[^\\s,;<>\"]+/g) ?? [])
+    .map((email) => email.trim().toLowerCase().replace(/[.)]+$/, ''))
+    .filter((email) => /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)),
+)]
 
 export default function Admin() {
   const [sessionReady, setSessionReady] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
-  const [loginEmail, setLoginEmail] = useState('')
+  const [loginEmail, setLoginEmail] = useState(adminEmail)
   const [loginPassword, setLoginPassword] = useState('')
   const [loginError, setLoginError] = useState('')
   const [subscribers, setSubscribers] = useState<Subscriber[]>([])
@@ -29,6 +36,12 @@ export default function Admin() {
   const [testEmail, setTestEmail] = useState('')
   const [sending, setSending] = useState<'test' | 'broadcast' | 'selected' | null>(null)
   const [notice, setNotice] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [newPasswordAgain, setNewPasswordAgain] = useState('')
+  const [passwordSaving, setPasswordSaving] = useState(false)
+  const [importing, setImporting] = useState(false)
+  const [importConsent, setImportConsent] = useState(false)
+  const [importPreview, setImportPreview] = useState<string[]>([])
 
   const checkAdmin = useCallback(async () => {
     const { data: { session } } = await supabase.auth.getSession()
@@ -69,8 +82,12 @@ export default function Admin() {
   const login = async (event: FormEvent) => {
     event.preventDefault()
     setLoginError('')
+    if (loginEmail.trim().toLowerCase() !== adminEmail) {
+      setLoginError('Ezen az oldalon csak a megadott adminfiókkal lehet belépni.')
+      return
+    }
     const { error } = await supabase.auth.signInWithPassword({
-      email: loginEmail.trim(),
+      email: adminEmail,
       password: loginPassword,
     })
     if (error) setLoginError('Hibás e-mail-cím vagy jelszó.')
@@ -157,6 +174,88 @@ export default function Admin() {
     void load()
   }
 
+  const changePassword = async (event: FormEvent) => {
+    event.preventDefault()
+    setNotice('')
+    if (newPassword.length < 10) {
+      setNotice('Az új jelszó legalább 10 karakter legyen.')
+      return
+    }
+    if (newPassword !== newPasswordAgain) {
+      setNotice('A két új jelszó nem egyezik.')
+      return
+    }
+    setPasswordSaving(true)
+    const { error } = await supabase.auth.updateUser({ password: newPassword })
+    setPasswordSaving(false)
+    if (error) {
+      setNotice('A jelszó módosítása nem sikerült.')
+      return
+    }
+    setNewPassword('')
+    setNewPasswordAgain('')
+    setNotice('A jelszó sikeresen megváltozott.')
+  }
+
+  const chooseImportFile = async (file: File | undefined) => {
+    setNotice('')
+    setImportPreview([])
+    if (!file) return
+    if (!/\.(csv|txt)$/i.test(file.name)) {
+      setNotice('Csak CSV vagy TXT fájl tölthető fel.')
+      return
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setNotice('A fájl legfeljebb 10 MB lehet.')
+      return
+    }
+    const emails = extractEmails(await file.text())
+    if (!emails.length) {
+      setNotice('A fájlban nem található érvényes e-mail-cím.')
+      return
+    }
+    if (emails.length > 10000) {
+      setNotice(`A fájl ${emails.length} egyedi címet tartalmaz. Egyszerre legfeljebb 10 000 tölthető fel.`)
+      return
+    }
+    setImportPreview(emails)
+    setNotice(`${emails.length} egyedi, érvényes e-mail-címet találtam. Az importáláshoz erősítsd meg a hozzájárulást.`)
+  }
+
+  const importEmails = async () => {
+    if (!importPreview.length || !importConsent) {
+      setNotice('Az importálás előtt erősítsd meg, hogy a címzettek hozzájárultak.')
+      return
+    }
+    setImporting(true)
+    setNotice('')
+    const now = new Date().toISOString()
+    for (let index = 0; index < importPreview.length; index += 500) {
+      const rows = importPreview.slice(index, index + 500).map((email) => ({
+        email,
+        status: 'active',
+        source: 'admin_import',
+        consent_at: now,
+        unsubscribed_at: null,
+        updated_at: now,
+      }))
+      const { error } = await supabase
+        .from('hurghada_newsletter_subscribers')
+        .upsert(rows, { onConflict: 'email' })
+      if (error) {
+        setImporting(false)
+        setNotice(`Az importálás ${index} cím után megállt: ${error.message}`)
+        return
+      }
+    }
+    setSelected(new Set(importPreview))
+    setNotice(`Sikeresen importáltam ${importPreview.length} címet, és kijelöltem őket a küldéshez.`)
+    setImportPreview([])
+    setImportConsent(false)
+    setImporting(false)
+    await load()
+  }
+
   const exportCsv = () => {
     const rows = ['email,status,feliratkozas,utolso_kampany', ...subscribers.map((item) =>
       [item.email, item.status, item.consent_at, item.last_campaign_at ?? ''].join(','),
@@ -181,7 +280,7 @@ export default function Admin() {
             <h1 className="text-2xl font-bold text-slate-900">Hurghada admin</h1>
             <p className="mt-2 text-sm text-slate-500">Jelentkezz be a VagyokRád adminfiókoddal.</p>
           </div>
-          <input type="email" required value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} placeholder="E-mail-cím" className="mb-3 min-h-12 w-full rounded-xl border px-4" />
+          <input type="email" required readOnly value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} placeholder="E-mail-cím" className="mb-3 min-h-12 w-full rounded-xl border bg-slate-50 px-4 text-slate-600" />
           <input type="password" required value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} placeholder="Jelszó" className="mb-3 min-h-12 w-full rounded-xl border px-4" />
           {loginError && <p className="mb-3 text-sm text-red-600">{loginError}</p>}
           <button className="min-h-12 w-full rounded-xl bg-sky-600 font-bold text-white hover:bg-sky-700">Belépés</button>
@@ -204,6 +303,17 @@ export default function Admin() {
       </div>
 
       <section className="mb-8 rounded-3xl border bg-white p-5 shadow-sm sm:p-7">
+        <div className="flex items-center gap-2"><KeyRound className="text-sky-600" /><h2 className="text-xl font-bold text-slate-900">Admin jelszó módosítása</h2></div>
+        <form onSubmit={changePassword} className="mt-4 grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
+          <input type="password" autoComplete="new-password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Új jelszó (legalább 10 karakter)" className="min-h-11 rounded-xl border px-4" />
+          <input type="password" autoComplete="new-password" value={newPasswordAgain} onChange={(e) => setNewPasswordAgain(e.target.value)} placeholder="Új jelszó még egyszer" className="min-h-11 rounded-xl border px-4" />
+          <button disabled={passwordSaving} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-slate-800 px-5 font-semibold text-white disabled:opacity-50">
+            {passwordSaving ? <Loader2 className="animate-spin" size={18} /> : <KeyRound size={18} />} Mentés
+          </button>
+        </form>
+      </section>
+
+      <section className="mb-8 rounded-3xl border bg-white p-5 shadow-sm sm:p-7">
         <h2 className="text-xl font-bold text-slate-900">E-mail-kampány készítő</h2>
         <div className="mt-5 grid gap-4">
           <label className="text-sm font-semibold">Tárgy
@@ -212,6 +322,26 @@ export default function Admin() {
           <label className="text-sm font-semibold">Üzenet
             <textarea value={message} maxLength={6000} onChange={(e) => setMessage(e.target.value)} rows={8} className="mt-1 w-full rounded-xl border p-4 font-normal leading-relaxed" />
           </label>
+          <div className="rounded-2xl border border-dashed border-sky-300 bg-sky-50 p-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <label className="inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl bg-white px-4 font-semibold text-sky-700 shadow-sm ring-1 ring-sky-200">
+                <Upload size={18} /> CSV vagy TXT kiválasztása
+                <input type="file" accept=".csv,.txt,text/csv,text/plain" className="hidden" onChange={(e) => void chooseImportFile(e.target.files?.[0])} />
+              </label>
+              <span className="text-sm text-slate-600">Maximum 10 000 egyedi e-mail-cím fájlonként.</span>
+            </div>
+            {importPreview.length > 0 && (
+              <div className="mt-4">
+                <label className="flex items-start gap-2 text-sm text-slate-700">
+                  <input type="checkbox" checked={importConsent} onChange={(e) => setImportConsent(e.target.checked)} className="mt-1" />
+                  Megerősítem, hogy a feltöltött {importPreview.length} cím tulajdonosai hozzájárultak promóciós e-mailek fogadásához.
+                </label>
+                <button type="button" disabled={!importConsent || importing} onClick={importEmails} className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-xl bg-emerald-600 px-5 font-semibold text-white disabled:opacity-50">
+                  {importing ? <Loader2 className="animate-spin" size={18} /> : <Upload size={18} />} {importPreview.length} cím importálása
+                </button>
+              </div>
+            )}
+          </div>
           <div className="flex flex-col gap-3 lg:flex-row">
             <input type="email" value={testEmail} onChange={(e) => setTestEmail(e.target.value)} placeholder="Teszt e-mail-cím" className="min-h-11 flex-1 rounded-xl border px-4" />
             <button disabled={sending !== null} onClick={() => sendCampaign('test')} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border px-5 font-semibold">
