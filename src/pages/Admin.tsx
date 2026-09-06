@@ -16,9 +16,9 @@ const campaignEndpoint = '/api/send-newsletter'
 const adminEmail = 'moldovansandor1998@gmail.com'
 
 const extractEmails = (text: string) => [...new Set(
-  (text.match(/[^\\s,;<>\"]+@[^\\s,;<>\"]+\\.[^\\s,;<>\"]+/g) ?? [])
+  (text.match(/[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+/gi) ?? [])
     .map((email) => email.trim().toLowerCase().replace(/[.)]+$/, ''))
-    .filter((email) => /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)),
+    .filter((email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)),
 )]
 
 export default function Admin() {
@@ -42,6 +42,7 @@ export default function Admin() {
   const [importing, setImporting] = useState(false)
   const [importConsent, setImportConsent] = useState(false)
   const [importPreview, setImportPreview] = useState<string[]>([])
+  const [importText, setImportText] = useState('')
   const [importFileName, setImportFileName] = useState('')
 
   const checkAdmin = useCallback(async () => {
@@ -245,9 +246,24 @@ export default function Admin() {
     setNotice('A jelszó sikeresen megváltozott.')
   }
 
+  const updateImportText = (value: string) => {
+    setImportText(value)
+    const emails = extractEmails(value)
+    setImportPreview(emails.slice(0, 10000))
+    setImportConsent(false)
+    if (emails.length > 10000) {
+      setNotice(`A lista ${emails.length} egyedi címet tartalmaz. Egyszerre legfeljebb 10 000 küldhető.`)
+    } else if (value.trim()) {
+      setNotice(`${emails.length} érvényes, egyedi e-mail-cím van a listában.`)
+    } else {
+      setNotice('')
+    }
+  }
+
   const chooseImportFile = async (file: File | undefined) => {
     setNotice('')
     setImportPreview([])
+    setImportText('')
     setImportFileName('')
     if (!file) return
     setImportFileName(file.name)
@@ -275,8 +291,9 @@ export default function Admin() {
       setNotice(`A fájl ${emails.length} egyedi címet tartalmaz. Egyszerre legfeljebb 10 000 tölthető fel.`)
       return
     }
+    setImportText(emails.join('\n'))
     setImportPreview(emails)
-    setNotice(`${emails.length} egyedi, érvényes e-mail-címet találtam. Az importáláshoz erősítsd meg a hozzájárulást.`)
+    setNotice(`${emails.length} egyedi, érvényes e-mail-címet találtam. A listát lent szerkesztheted.`)
   }
 
   const importEmails = async () => {
@@ -308,6 +325,8 @@ export default function Admin() {
     setSelected(new Set(importPreview))
     setNotice(`Sikeresen importáltam ${importPreview.length} címet, és kijelöltem őket a küldéshez.`)
     setImportPreview([])
+    setImportText('')
+    setImportFileName('')
     setImportConsent(false)
     setImporting(false)
     await load()
@@ -386,6 +405,21 @@ export default function Admin() {
                 <input type="file" accept=".csv,.txt,text/csv,text/plain" className="hidden" onChange={(e) => void chooseImportFile(e.target.files?.[0])} />
               </label>
               <span className="text-sm text-slate-600">{importFileName ? `Kiválasztva: ${importFileName}` : 'Maximum 10 000 egyedi e-mail-cím fájlonként.'}</span>
+            </div>
+            <div className="mt-4">
+              <label className="block text-sm font-semibold text-slate-800">
+                Címzettek szerkesztése
+                <span className="ml-2 font-normal text-sky-700">{importPreview.length} / 10 000 érvényes, egyedi cím</span>
+                <textarea
+                  value={importText}
+                  onChange={(event) => updateImportText(event.target.value)}
+                  rows={10}
+                  spellCheck={false}
+                  placeholder={'pelda@gmail.com\npelda2@gmail.com'}
+                  className="mt-2 w-full rounded-xl border bg-white p-4 font-mono text-sm font-normal leading-6 text-slate-800"
+                />
+              </label>
+              <p className="mt-2 text-xs text-slate-500">Egy sorba egy e-mail-cím kerüljön. Innen törölhetsz, illetve kézzel új címet is hozzáadhatsz.</p>
             </div>
             {importPreview.length > 0 && (
               <div className="mt-4">
