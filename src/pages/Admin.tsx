@@ -144,7 +144,7 @@ export default function Admin() {
     else void load()
   }
 
-  const sendCampaign = async (mode: 'test' | 'broadcast' | 'selected') => {
+  const sendCampaign = async (mode: 'test' | 'broadcast' | 'selected', overrideEmails?: string[]) => {
     setNotice('')
     if (!subject.trim() || !message.trim()) {
       setNotice('A tárgy és az üzenet kitöltése kötelező.')
@@ -154,12 +154,13 @@ export default function Admin() {
       setNotice('Adj meg egy érvényes tesztcímet.')
       return
     }
-    if (mode === 'selected' && selected.size === 0) {
+    const effectiveSelected = mode === 'selected' ? (overrideEmails ?? [...selected]) : []
+    if (mode === 'selected' && effectiveSelected.length === 0) {
       setNotice('Előbb jelölj ki legalább egy aktív feliratkozót.')
       return
     }
     if (mode === 'broadcast' && !window.confirm(`Biztosan elküldöd ${activeCount} aktív feliratkozónak?`)) return
-    if (mode === 'selected' && !window.confirm(`Biztosan elküldöd ${selected.size} kijelölt feliratkozónak?`)) return
+    if (mode === 'selected' && !window.confirm(`Biztosan elküldöd ${effectiveSelected.length} címzettnek?`)) return
 
     const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession()
     let session = refreshed.session ?? (await supabase.auth.getSession()).data.session
@@ -171,7 +172,7 @@ export default function Admin() {
     }
 
     setSending(mode)
-    const selectedEmails = mode === 'selected' ? [...selected] : []
+    const selectedEmails = effectiveSelected
     const batches = mode === 'selected'
       ? Array.from({ length: Math.ceil(selectedEmails.length / 100) }, (_, index) => selectedEmails.slice(index * 100, index * 100 + 100))
       : [[]]
@@ -317,7 +318,7 @@ export default function Admin() {
     }
     setImporting(true)
     setSelected(new Set(importPreview))
-    setNotice(`${importPreview.length} címzett készen áll a küldésre. Ezek még nem feliratkozók; csak akkor kerülnek a feliratkozók közé, ha az e-mailben a feliratkozási linkre kattintanak.`)
+    await sendCampaign('selected', importPreview)
     setImporting(false)
   }
 
@@ -416,8 +417,8 @@ export default function Admin() {
                   <input type="checkbox" checked={importConsent} onChange={(e) => setImportConsent(e.target.checked)} className="mt-1" />
                   Megerősítem, hogy a feltöltött {importPreview.length} cím tulajdonosai hozzájárultak promóciós e-mailek fogadásához.
                 </label>
-                <button type="button" disabled={!importConsent || importing} onClick={importEmails} className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-xl bg-emerald-600 px-5 font-semibold text-white disabled:opacity-50">
-                  {importing ? <Loader2 className="animate-spin" size={18} /> : <Upload size={18} />} {importPreview.length} címzett előkészítése
+                <button type="button" disabled={!importConsent || importing || sending !== null} onClick={importEmails} className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-xl bg-emerald-600 px-5 font-semibold text-white disabled:opacity-50">
+                  {importing || sending === 'selected' ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />} {sending === 'selected' ? `Küldés ${sendProgress.sent} / ${sendProgress.total}` : `Küldés ${importPreview.length} címzettnek`}
                 </button>
               </div>
             )}
