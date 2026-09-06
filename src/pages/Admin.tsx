@@ -45,15 +45,34 @@ export default function Admin() {
   const [importFileName, setImportFileName] = useState('')
 
   const checkAdmin = useCallback(async () => {
+    // A böngészőben korábbról megmaradhatott egy másik projekt munkamenete.
+    // A getUser hálózaton, a Hurghada saját Auth szerverén ellenőrzi a tokent.
     const { data: { session } } = await supabase.auth.getSession()
-    setIsAdmin(session?.user?.app_metadata?.is_admin === true)
+    if (!session) {
+      setIsAdmin(false)
+      setSessionReady(true)
+      return
+    }
+
+    const { data: userData, error: userError } = await supabase.auth.getUser()
+    const validAdmin = !userError && userData.user?.app_metadata?.is_admin === true
+    if (!validAdmin) {
+      await supabase.auth.signOut({ scope: 'local' })
+      setIsAdmin(false)
+      setNotice('A korábbi, másik oldalhoz tartozó munkamenetet töröltük. Jelentkezz be a Hurghada adminfiókkal.')
+    } else {
+      setIsAdmin(true)
+    }
     setSessionReady(true)
   }, [])
 
   useEffect(() => {
     void checkAdmin()
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAdmin(session?.user?.app_metadata?.is_admin === true)
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' || !session) setIsAdmin(false)
+      else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        setIsAdmin(session.user.app_metadata?.is_admin === true)
+      }
       setSessionReady(true)
     })
     return () => data.subscription.unsubscribe()
@@ -140,9 +159,12 @@ export default function Admin() {
     if (mode === 'broadcast' && !window.confirm(`Biztosan elküldöd ${activeCount} aktív feliratkozónak?`)) return
     if (mode === 'selected' && !window.confirm(`Biztosan elküldöd ${selected.size} kijelölt feliratkozónak?`)) return
 
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session?.access_token) {
-      setNotice('Az admin munkamenet lejárt. Jelentkezz be újra.')
+    const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession()
+    const session = refreshed.session ?? (await supabase.auth.getSession()).data.session
+    if (refreshError || !session?.access_token) {
+      await supabase.auth.signOut({ scope: 'local' })
+      setIsAdmin(false)
+      setNotice('Az admin munkamenet lejárt. Jelentkezz be újra a Hurghada adminfiókkal.')
       return
     }
 
