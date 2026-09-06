@@ -12,7 +12,7 @@ type Subscriber = {
   last_campaign_at: string | null
 }
 
-const campaignEndpoint = 'https://vagyokrad.hu/api/hurghada-newsletter'
+const campaignEndpoint = '/api/newsletter-proxy'
 const adminEmail = 'moldovansandor1998@gmail.com'
 
 const extractEmails = (text: string) => [...new Set(
@@ -149,29 +149,39 @@ export default function Admin() {
     }
 
     setSending(mode)
-    const response = await fetch(campaignEndpoint, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${session.access_token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        mode,
-        subject: subject.trim(),
-        message: message.trim(),
-        email: testEmail.trim().toLowerCase(),
-        emails: [...selected],
-      }),
-    })
-    const result = await response.json().catch(() => ({}))
-    setSending(null)
-
-    if (!response.ok) {
-      setNotice(result.error || 'A küldés nem sikerült.')
-      return
+    const controller = new AbortController()
+    const timeout = window.setTimeout(() => controller.abort(), 55_000)
+    try {
+      const response = await fetch(campaignEndpoint, {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          mode,
+          subject: subject.trim(),
+          message: message.trim(),
+          email: testEmail.trim().toLowerCase(),
+          emails: [...selected],
+        }),
+      })
+      const result = await response.json().catch(() => ({}))
+      if (!response.ok) {
+        setNotice(result.error || 'A küldés nem sikerült.')
+        return
+      }
+      setNotice(`Sikeres küldés: ${result.sent} e-mail.`)
+      void load()
+    } catch (error) {
+      setNotice(error instanceof DOMException && error.name === 'AbortError'
+        ? 'A levélküldés túl sokáig tartott. Próbáld meg újra.'
+        : 'Nem sikerült kapcsolódni a levélküldő rendszerhez.')
+    } finally {
+      window.clearTimeout(timeout)
+      setSending(null)
     }
-    setNotice(`Sikeres küldés: ${result.sent} e-mail.`)
-    void load()
   }
 
   const changePassword = async (event: FormEvent) => {
