@@ -1,3 +1,5 @@
+import { createHmac } from 'node:crypto'
+
 const json = (res, status, body) =>
   res.status(status).setHeader('Content-Type', 'application/json; charset=utf-8').send(JSON.stringify(body))
 
@@ -8,7 +10,14 @@ const escapeHtml = (value = '') => String(value).replace(/[&<>"']/g, c => ({
   '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;',
 }[c]))
 
-const html = (message, unsubscribeUrl) => `<!doctype html><html lang="hu"><body style="margin:0;background:#f0f9ff;font-family:Arial,sans-serif;color:#172033"><table width="100%" cellpadding="0" cellspacing="0" style="padding:28px 12px"><tr><td align="center"><table width="100%" cellpadding="0" cellspacing="0" style="max-width:580px;background:#fff;border:1px solid #bae6fd;border-radius:20px"><tr><td style="padding:26px;background:#0284c7;color:#fff;text-align:center;font-size:27px;font-weight:800">Hurghada Programok ☀️</td></tr><tr><td style="padding:28px;font-size:16px;line-height:1.65">${escapeHtml(message).replace(/\n/g,'<br>')}<p style="text-align:center;margin:28px 0"><a href="https://hurghadaprogramok.hu" style="background:#f97316;color:#fff;text-decoration:none;padding:14px 24px;border-radius:999px;font-weight:700">Megnézem a programokat</a></p><p style="color:#64748b;border-top:1px solid #e2e8f0;padding-top:18px">Üdvözlettel:<br><strong>A Hurghada Programok csapata</strong></p><p style="font-size:12px;color:#94a3b8;text-align:center"><a href="${unsubscribeUrl}" style="color:#64748b">Leiratkozás</a></p></td></tr></table></td></tr></table></body></html>`
+const html = (message, unsubscribeUrl, subscribeUrl) => `<!doctype html><html lang="hu"><body style="margin:0;background:#f0f9ff;font-family:Arial,sans-serif;color:#172033"><table width="100%" cellpadding="0" cellspacing="0" style="padding:28px 12px"><tr><td align="center"><table width="100%" cellpadding="0" cellspacing="0" style="max-width:580px;background:#fff;border:1px solid #bae6fd;border-radius:20px"><tr><td style="padding:26px;background:#0284c7;color:#fff;text-align:center;font-size:27px;font-weight:800">Hurghada Programok ☀️</td></tr><tr><td style="padding:28px;font-size:16px;line-height:1.65">${escapeHtml(message).replace(/\n/g,'<br>')}<p style="text-align:center;margin:28px 0"><a href="${subscribeUrl}" style="background:#f97316;color:#fff;text-decoration:none;padding:14px 24px;border-radius:999px;font-weight:700">Feliratkozom és megnézem a programokat</a></p><p style="color:#64748b;border-top:1px solid #e2e8f0;padding-top:18px">Üdvözlettel:<br><strong>A Hurghada Programok csapata</strong></p><p style="font-size:12px;color:#94a3b8;text-align:center"><a href="${unsubscribeUrl}" style="color:#64748b">Leiratkozás</a></p></td></tr></table></td></tr></table></body></html>`
+
+const subscribeLink = (email, secret) => {
+  const issuedAt = Math.floor(Date.now() / 1000).toString()
+  const payload = `${email}|${issuedAt}`
+  const signature = createHmac('sha256', secret).update(payload).digest('hex')
+  return `https://hurghadaprogramok.hu/api/subscribe-and-view?email=${encodeURIComponent(email)}&ts=${issuedAt}&sig=${signature}`
+}
 
 const dbFetch = (path, token, options = {}) => fetch(`${supabaseUrl}/rest/v1/${path}`, {
   ...options,
@@ -65,7 +74,8 @@ export default async function handler(req, res) {
   for(let i=0;i<recipients.length;i+=50){
     const chunk=recipients.slice(i,i+50).map(r=>{
       const unsubscribeUrl=r.unsubscribe_token?`https://hurghadaprogramok.hu/api/unsubscribe?token=${encodeURIComponent(r.unsubscribe_token)}`:'https://hurghadaprogramok.hu'
-      return {from:'Hurghada Programok <uzenet@hurghadaprogramok.hu>',to:[r.email],subject,html:html(message,unsubscribeUrl)}
+      const subscribeUrl=subscribeLink(r.email,resendKey)
+      return {from:'Hurghada Programok <uzenet@hurghadaprogramok.hu>',to:[r.email],subject,html:html(message,unsubscribeUrl,subscribeUrl)}
     })
     const response=await fetch(chunk.length===1?'https://api.resend.com/emails':'https://api.resend.com/emails/batch',{
       method:'POST',headers:{Authorization:`Bearer ${resendKey}`,'Content-Type':'application/json'},body:JSON.stringify(chunk.length===1?chunk[0]:chunk)
