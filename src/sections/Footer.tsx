@@ -1,4 +1,5 @@
 import { Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
@@ -8,6 +9,7 @@ export default function Footer() {
           <p className="text-[#94a3b8] text-sm mb-2">
             &copy; {new Date().getFullYear()} Hurghada Programok — Minden jog fenntartva.
           </p>
+          <Link to="/admin" className="mb-3 inline-block text-xs text-[#64748b] hover:text-white">Admin</Link>
           <p className="text-[#64748b] text-xs flex items-center justify-center gap-1">
             Made with <Heart size={12} className="text-[#f43f5e] fill-current" /> for Hurghada travelers
           </p>

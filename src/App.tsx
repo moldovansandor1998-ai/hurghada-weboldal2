@@ -11,6 +11,8 @@ import BlogDetail from '@/sections/BlogDetail';
 import OffersSection from '@/sections/OffersSection';
 import FontosInformaciok from '@/pages/FontosInformaciok';
 import ProgramPage from '@/pages/ProgramPage';
+import Admin from '@/pages/Admin';
+import NewsletterSection from '@/sections/NewsletterSection';
 
 function HomePage() {
   return (
@@ -20,6 +22,7 @@ function HomePage() {
       <ProgramsSection />
       <TestimonialsSection />
       <ContactSection />
+      <NewsletterSection />
       <Footer />
     </>
   );
@@ -37,6 +40,7 @@ function App() {
           <Route path="/ajanlatok" element={<OffersSection />} />
           <Route path="/fontos-informaciok" element={<FontosInformaciok />} />
           <Route path="/program/:programId" element={<ProgramPage />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </div>
     </HashRouter>
