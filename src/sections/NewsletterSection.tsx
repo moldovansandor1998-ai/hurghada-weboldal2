@@ -18,7 +18,7 @@ function SignupForm({ compact = false, onSubscribed }: { compact?: boolean; onSu
     }
     setLoading(true)
     setMessage('')
-    const { data, error } = await supabase.rpc('subscribe_hurghada_newsletter', { p_email: normalized })
+    const { data, error } = await supabase.rpc('subscribe_newsletter', { p_email: normalized })
     setLoading(false)
     if (error) {
       setSuccess(false)
