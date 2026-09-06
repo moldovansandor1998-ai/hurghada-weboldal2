@@ -312,38 +312,13 @@ export default function Admin() {
 
   const importEmails = async () => {
     if (!importPreview.length || !importConsent) {
-      setNotice('Az importálás előtt erősítsd meg, hogy a címzettek hozzájárultak.')
+      setNotice('A küldés előtt erősítsd meg, hogy a címzettek hozzájárultak.')
       return
     }
     setImporting(true)
-    setNotice('')
-    const now = new Date().toISOString()
-    for (let index = 0; index < importPreview.length; index += 500) {
-      const rows = importPreview.slice(index, index + 500).map((email) => ({
-        email,
-        status: 'active',
-        source: 'admin_import',
-        consent_at: now,
-        unsubscribed_at: null,
-        updated_at: now,
-      }))
-      const { error } = await supabase
-        .from('newsletter_subscribers')
-        .upsert(rows, { onConflict: 'email' })
-      if (error) {
-        setImporting(false)
-        setNotice(`Az importálás ${index} cím után megállt: ${error.message}`)
-        return
-      }
-    }
     setSelected(new Set(importPreview))
-    setNotice(`Sikeresen importáltam ${importPreview.length} címet, és kijelöltem őket a küldéshez.`)
-    setImportPreview([])
-    setImportText('')
-    setImportFileName('')
-    setImportConsent(false)
+    setNotice(`${importPreview.length} címzett készen áll a küldésre. Ezek még nem feliratkozók; csak akkor kerülnek a feliratkozók közé, ha az e-mailben a feliratkozási linkre kattintanak.`)
     setImporting(false)
-    await load()
   }
 
   const exportCsv = () => {
@@ -442,7 +417,7 @@ export default function Admin() {
                   Megerősítem, hogy a feltöltött {importPreview.length} cím tulajdonosai hozzájárultak promóciós e-mailek fogadásához.
                 </label>
                 <button type="button" disabled={!importConsent || importing} onClick={importEmails} className="mt-3 inline-flex min-h-10 items-center gap-2 rounded-xl bg-emerald-600 px-5 font-semibold text-white disabled:opacity-50">
-                  {importing ? <Loader2 className="animate-spin" size={18} /> : <Upload size={18} />} {importPreview.length} cím importálása
+                  {importing ? <Loader2 className="animate-spin" size={18} /> : <Upload size={18} />} {importPreview.length} címzett előkészítése
                 </button>
               </div>
             )}
