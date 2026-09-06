@@ -63,7 +63,7 @@ export default async function handler(req, res) {
     const emails = Array.isArray(req.body?.emails) ? req.body.emails : []
     recipients = [...new Set(emails
       .map(email => String(email).trim().toLowerCase())
-      .filter(email => /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email))
+      .filter(email => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
     )].slice(0, 100).map(email => ({ email, unsubscribe_token: null }))
   } else {
     const response=await dbFetch('newsletter_subscribers?select=email,unsubscribe_token&status=eq.active&order=created_at.asc&limit=10000',token)
