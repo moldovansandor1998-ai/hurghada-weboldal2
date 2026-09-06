@@ -35,6 +35,7 @@ export default function Admin() {
   const [message, setMessage] = useState('Szia!\n\nÚj élményekkel és hasznos információkkal frissült a Hurghada Programok oldala. Nézd meg az aktuális kirándulásokat, válaszd ki a kedvencedet, és érdeklődj egyszerűen WhatsAppon!\n\nSzeretettel várunk Hurghadában! ☀️')
   const [testEmail, setTestEmail] = useState('')
   const [sending, setSending] = useState<'test' | 'broadcast' | 'selected' | null>(null)
+  const [sendProgress, setSendProgress] = useState({ sent: 0, total: 0 })
   const [notice, setNotice] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [newPasswordAgain, setNewPasswordAgain] = useState('')
@@ -161,7 +162,7 @@ export default function Admin() {
     if (mode === 'selected' && !window.confirm(`Biztosan elküldöd ${selected.size} kijelölt feliratkozónak?`)) return
 
     const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession()
-    const session = refreshed.session ?? (await supabase.auth.getSession()).data.session
+    let session = refreshed.session ?? (await supabase.auth.getSession()).data.session
     if (refreshError || !session?.access_token) {
       await supabase.auth.signOut({ scope: 'local' })
       setIsAdmin(false)
@@ -170,55 +171,68 @@ export default function Admin() {
     }
 
     setSending(mode)
-    const controller = new AbortController()
-    const timeout = window.setTimeout(() => controller.abort(), 55_000)
+    const selectedEmails = mode === 'selected' ? [...selected] : []
+    const batches = mode === 'selected'
+      ? Array.from({ length: Math.ceil(selectedEmails.length / 100) }, (_, index) => selectedEmails.slice(index * 100, index * 100 + 100))
+      : [[]]
+    setSendProgress({ sent: 0, total: mode === 'selected' ? selectedEmails.length : mode === 'broadcast' ? activeCount : 1 })
+
+    let totalSent = 0
     try {
-      const requestBody = JSON.stringify({
-        mode,
-        subject: subject.trim(),
-        message: message.trim(),
-        email: testEmail.trim().toLowerCase(),
-        emails: [...selected],
-      })
-      const sendRequest = (accessToken: string) => fetch(campaignEndpoint, {
-        method: 'POST',
-        signal: controller.signal,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: requestBody,
-      })
+      for (const emails of batches) {
+        const controller = new AbortController()
+        const timeout = window.setTimeout(() => controller.abort(), 55_000)
+        const requestBody = JSON.stringify({
+          mode,
+          subject: subject.trim(),
+          message: message.trim(),
+          email: testEmail.trim().toLowerCase(),
+          emails,
+        })
+        const sendRequest = (accessToken: string) => fetch(campaignEndpoint, {
+          method: 'POST',
+          signal: controller.signal,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: requestBody,
+        })
 
-      let response = await sendRequest(session.access_token)
-      if (response.status === 401) {
-        const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession()
-        if (refreshError || !refreshed.session?.access_token) {
-          await supabase.auth.signOut()
-          setIsAdmin(false)
-          setNotice('A korábbi belépés lejárt. Jelentkezz be újra az új adminjelszóval.')
-          return
+        try {
+          let response = await sendRequest(session.access_token)
+          if (response.status === 401) {
+            const renewed = await supabase.auth.refreshSession()
+            if (renewed.error || !renewed.data.session?.access_token) {
+              await supabase.auth.signOut()
+              setIsAdmin(false)
+              setNotice('A korábbi belépés lejárt. Jelentkezz be újra az adminfiókkal.')
+              return
+            }
+            session = renewed.data.session
+            response = await sendRequest(session.access_token)
+          }
+
+          const result = await response.json().catch(() => ({}))
+          if (!response.ok) {
+            setNotice(`${totalSent} e-mail sikeresen elment, majd a küldés megállt: ${result.error || 'ismeretlen hiba'}`)
+            return
+          }
+          totalSent += Number(result.sent || 0)
+          setSendProgress({ sent: totalSent, total: mode === 'selected' ? selectedEmails.length : totalSent })
+          setNotice(`Küldés folyamatban: ${totalSent} / ${mode === 'selected' ? selectedEmails.length : totalSent} e-mail.`)
+        } finally {
+          window.clearTimeout(timeout)
         }
-        response = await sendRequest(refreshed.session.access_token)
       }
 
-      const result = await response.json().catch(() => ({}))
-      if (!response.ok) {
-        if (response.status === 401) {
-          await supabase.auth.signOut()
-          setIsAdmin(false)
-        }
-        setNotice(result.error || 'A küldés nem sikerült.')
-        return
-      }
-      setNotice(`Sikeres küldés: ${result.sent} e-mail.`)
+      setNotice(`Sikeres küldés: ${totalSent} e-mail.`)
       void load()
     } catch (error) {
       setNotice(error instanceof DOMException && error.name === 'AbortError'
-        ? 'A levélküldés túl sokáig tartott. Próbáld meg újra.'
-        : 'Nem sikerült kapcsolódni a levélküldő rendszerhez.')
+        ? `A küldés ${totalSent} cím után időtúllépés miatt megállt. Innen újraindítható.`
+        : `A küldés ${totalSent} cím után kapcsolódási hiba miatt megállt.`)
     } finally {
-      window.clearTimeout(timeout)
       setSending(null)
     }
   }
@@ -439,7 +453,7 @@ export default function Admin() {
               {sending === 'test' ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />} Próba küldése
             </button>
             <button disabled={sending !== null || selected.size === 0} onClick={() => sendCampaign('selected')} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-amber-500 px-5 font-semibold text-white disabled:opacity-50">
-              {sending === 'selected' ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />} Kijelölteknek ({selected.size})
+              {sending === 'selected' ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />} {sending === 'selected' ? `Küldés ${sendProgress.sent} / ${sendProgress.total}` : `Kijelölteknek (${selected.size})`}
             </button>
             <button disabled={sending !== null || activeCount === 0} onClick={() => sendCampaign('broadcast')} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-sky-600 px-5 font-semibold text-white disabled:opacity-50">
               {sending === 'broadcast' ? <Loader2 className="animate-spin" size={18} /> : <Send size={18} />} Minden aktívnak ({activeCount})
