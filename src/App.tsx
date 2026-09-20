@@ -13,6 +13,8 @@ import FontosInformaciok from '@/pages/FontosInformaciok';
 import ProgramPage from '@/pages/ProgramPage';
 import Admin from '@/pages/Admin';
 import NewsletterSection from '@/sections/NewsletterSection';
+import { LanguageProvider, useLanguage } from '@/lib/i18n';
+import ImportantInformationEn from '@/pages/ImportantInformationEn';
 
 function HomePage() {
   return (
@@ -35,7 +37,7 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
+    <LanguageProvider><BrowserRouter>
       <div className="min-h-screen bg-white font-sans antialiased">
         <Navigation />
         <Routes>
@@ -43,13 +45,18 @@ function App() {
           <Route path="/blog" element={<BlogList />} />
           <Route path="/blog/:slug" element={<BlogDetail />} />
           <Route path="/ajanlatok" element={<OffersSection />} />
-          <Route path="/fontos-informaciok" element={<FontosInformaciok />} />
+          <Route path="/fontos-informaciok" element={<LocalizedImportantInformation />} />
           <Route path="/program/:programId" element={<ProgramPage />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </BrowserRouter></LanguageProvider>
   );
+}
+
+function LocalizedImportantInformation() {
+  const { language } = useLanguage()
+  return language === 'en' ? <ImportantInformationEn /> : <FontosInformaciok />
 }
 
 export default App;

@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { testimonials } from '@/data/testimonials';
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { useLanguage } from '@/lib/i18n';
 
 export default function TestimonialsSection() {
+  const { language } = useLanguage();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const { ref, isVisible } = useScrollAnimation();
 
@@ -22,7 +24,7 @@ export default function TestimonialsSection() {
           }`}
         >
           <h2 className="text-[#1e293b] font-bold text-3xl sm:text-4xl mb-3">
-            Vendég visszajelzések
+            {language === 'en' ? 'Guest reviews' : 'Vendég visszajelzések'}
           </h2>
         </div>
 
@@ -40,7 +42,7 @@ export default function TestimonialsSection() {
             >
               <img
                 src={t.image}
-                alt={`Vendég visszajelzés ${t.id}`}
+                alt={`${language === 'en' ? 'Guest review' : 'Vendég visszajelzés'} ${t.id}`}
                 className="w-full h-full object-cover"
                 loading="lazy"
               />

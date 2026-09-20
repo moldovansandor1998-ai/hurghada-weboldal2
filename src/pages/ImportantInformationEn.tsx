@@ -1,0 +1,16 @@
+import { Link } from 'react-router-dom'
+import { AlertTriangle, Bus, CalendarDays, ChevronLeft, Clock, CreditCard, Languages, Smartphone } from 'lucide-react'
+
+const items = [
+  { icon: Languages, title: 'Guides in Cairo and Luxor', text: 'Groups of fewer than 15 guests receive an English-speaking guide. A private Hungarian-guided tour can be arranged for one group of more than 15 guests at a separately agreed price.' },
+  { icon: Bus, title: 'Hotel-to-hotel transfer', text: 'Pick-up and return transfer are included. If we tell you to wait at the hotel security gate, the vehicle is not permitted to enter the hotel grounds, so please wait at that exact point.' },
+  { icon: Bus, title: 'Transfer surcharge', text: 'From Makadi, Sahl Hasheesh and Safaga: up to 4 guests +€10, up to 6 guests +€15, more than 6 guests +€25 per booking and programme, not per person.' },
+  { icon: CalendarDays, title: 'When to book', text: 'For most programmes it is enough to contact us one day before. Private Cairo or Luxor programmes for groups of more than 15 guests must be arranged in advance.' },
+  { icon: CreditCard, title: 'Payment', text: 'The exact transfer time is normally sent around 20:00–21:00 on the evening before departure. Payment is available by euro transfer, Hungarian bank transfer or Revolut. Cash in EUR or USD may be possible by prior agreement.' },
+  { icon: Clock, title: 'Pick-up time', text: 'A delay of 10–20 minutes may occur because guests are collected from several hotels. Please be ready on time at the confirmed meeting point.' },
+  { icon: Smartphone, title: 'Stay connected', text: 'A local SIM card is useful for WhatsApp messages and transfer updates. SIM cards are available at Hurghada Airport and in the city.' },
+]
+
+export default function ImportantInformationEn() {
+  return <main className="min-h-screen bg-gradient-to-b from-sky-50 to-white pb-16 pt-24"><div className="mx-auto max-w-[900px] px-4 sm:px-6"><Link to="/" className="mb-6 inline-flex items-center gap-1.5 text-sm font-semibold text-sky-700"><ChevronLeft size={16} /> Back to home</Link><div className="mb-10 text-center"><div className="mb-4 inline-flex items-center gap-2 rounded-full bg-amber-500 px-4 py-2 text-sm font-bold text-white"><AlertTriangle size={16} /> IMPORTANT INFORMATION</div><h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">Before you book</h1><p className="mx-auto mt-3 max-w-xl text-slate-600">Please read these details before booking. They answer the most common questions about guides, transfers and payment.</p></div><div className="grid gap-5">{items.map(({ icon: Icon, title, text }) => <article key={title} className="rounded-2xl border bg-white p-6 shadow-sm"><div className="flex items-start gap-4"><div className="grid h-11 w-11 flex-none place-items-center rounded-xl bg-sky-100 text-sky-700"><Icon size={21} /></div><div><h2 className="text-lg font-bold text-slate-900">{title}</h2><p className="mt-2 leading-relaxed text-slate-600">{text}</p></div></div></article>)}</div><div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-relaxed text-amber-900">By booking and participating, you accept the meeting-point, transfer and payment information sent for your selected programme.</div></div></main>
+}
