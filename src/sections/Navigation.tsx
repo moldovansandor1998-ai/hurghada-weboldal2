@@ -112,9 +112,20 @@ export default function Navigation() {
             <div className="inline-flex rounded-full border bg-slate-50 p-1 text-xs font-bold" aria-label="Language selector"><button onClick={() => setLanguage('hu')} className={`rounded-full px-2.5 py-1.5 ${language === 'hu' ? 'bg-sky-600 text-white' : 'text-slate-600'}`}>HU</button><button onClick={() => setLanguage('en')} className={`rounded-full px-2.5 py-1.5 ${language === 'en' ? 'bg-sky-600 text-white' : 'text-slate-600'}`}>EN</button></div>
           </div>
 
+          {/* Mobile language switcher — always visible, not hidden in the menu. */}
+          <button
+            type="button"
+            onClick={() => setLanguage(en ? 'hu' : 'en')}
+            aria-label={en ? 'Váltás magyar nyelvre' : 'Switch to English'}
+            className="ml-auto mr-1 inline-flex min-h-10 min-w-10 items-center justify-center rounded-full border border-sky-200 bg-sky-50 px-3 text-sm font-black text-sky-700 shadow-sm md:hidden"
+          >
+            {en ? 'HU' : 'EN'}
+          </button>
+
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? (en ? 'Close menu' : 'Menü bezárása') : (en ? 'Open menu' : 'Menü megnyitása')}
             className="md:hidden text-[#1e293b] p-2"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
