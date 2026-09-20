@@ -1,4 +1,5 @@
-import { FormEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import type { FormEvent } from 'react'
 import { CheckCircle2, Loader2, Mail, X } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
