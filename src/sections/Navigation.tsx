@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Phone, BookOpen, Gift, AlertTriangle } from 'lucide-react';
 import { WHATSAPP_NUMBER } from '@/data/programs';
+import { useLanguage } from '@/lib/i18n';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { language, setLanguage } = useLanguage();
+  const en = language === 'en';
   const isHomePage = location.pathname === '/';
 
   useEffect(() => {
@@ -47,7 +50,7 @@ export default function Navigation() {
             onClick={() => { navigate('/'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             className="text-[#0284c7] font-bold text-xl tracking-tight hover:text-[#0369a1] transition-colors"
           >
-            Hurghada Programok
+            {en ? 'Hurghada Excursions' : 'Hurghada Programok'}
           </button>
 
           {/* Desktop Nav */}
@@ -56,7 +59,7 @@ export default function Navigation() {
               onClick={() => scrollToSection('programok')}
               className="text-[#1e293b] hover:text-[#0284c7] font-medium text-sm transition-colors"
             >
-              Programok
+              {en ? 'Excursions' : 'Programok'}
             </button>
             <button
               onClick={() => { navigate('/ajanlatok'); }}
@@ -67,7 +70,7 @@ export default function Navigation() {
               }`}
             >
               <Gift size={14} />
-              Ajánlatok
+              {en ? 'Offers' : 'Ajánlatok'}
             </button>
             <button
               onClick={() => { navigate('/blog'); }}
@@ -84,7 +87,7 @@ export default function Navigation() {
               onClick={() => scrollToSection('kapcsolat')}
               className={`font-medium text-sm transition-colors ${location.pathname === '/kapcsolat' ? 'text-[#0284c7]' : 'text-[#1e293b] hover:text-[#0284c7]'}`}
             >
-              Kapcsolat
+              {en ? 'Contact' : 'Kapcsolat'}
             </button>
             <button
               onClick={() => { navigate('/fontos-informaciok'); }}
@@ -95,7 +98,7 @@ export default function Navigation() {
               }`}
             >
               <AlertTriangle size={14} />
-              Fontos infók
+              {en ? 'Important info' : 'Fontos infók'}
             </button>
             <a
               href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
@@ -104,8 +107,9 @@ export default function Navigation() {
               className="inline-flex items-center gap-1.5 bg-[#25d366] hover:bg-[#128c7e] text-white font-bold text-sm px-4 py-2.5 rounded-full transition-all hover:scale-105 shadow-md"
             >
               <Phone size={14} />
-              Foglalás WhatsAppon
+              {en ? 'Book on WhatsApp' : 'Foglalás WhatsAppon'}
             </a>
+            <div className="inline-flex rounded-full border bg-slate-50 p-1 text-xs font-bold" aria-label="Language selector"><button onClick={() => setLanguage('hu')} className={`rounded-full px-2.5 py-1.5 ${language === 'hu' ? 'bg-sky-600 text-white' : 'text-slate-600'}`}>HU</button><button onClick={() => setLanguage('en')} className={`rounded-full px-2.5 py-1.5 ${language === 'en' ? 'bg-sky-600 text-white' : 'text-slate-600'}`}>EN</button></div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -126,7 +130,7 @@ export default function Navigation() {
               onClick={() => scrollToSection('programok')}
               className="block w-full text-left text-[#1e293b] hover:text-[#0284c7] font-medium py-2 transition-colors"
             >
-              Programok
+              {en ? 'Excursions' : 'Programok'}
             </button>
             <button
               onClick={() => { navigate('/ajanlatok'); setIsMobileMenuOpen(false); }}
@@ -137,7 +141,7 @@ export default function Navigation() {
               }`}
             >
               <Gift size={16} />
-              Ajánlatok
+              {en ? 'Offers' : 'Ajánlatok'}
             </button>
             <button
               onClick={() => { navigate('/blog'); setIsMobileMenuOpen(false); }}
@@ -154,7 +158,7 @@ export default function Navigation() {
               onClick={() => scrollToSection('kapcsolat')}
               className={`block w-full text-left font-medium py-2 transition-colors ${location.pathname === '/kapcsolat' ? 'text-[#0284c7]' : 'text-[#1e293b] hover:text-[#0284c7]'}`}
             >
-              Kapcsolat
+              {en ? 'Contact' : 'Kapcsolat'}
             </button>
             <button
               onClick={() => { navigate('/fontos-informaciok'); setIsMobileMenuOpen(false); }}
@@ -165,7 +169,7 @@ export default function Navigation() {
               }`}
             >
               <AlertTriangle size={16} />
-              Fontos infók
+              {en ? 'Important info' : 'Fontos infók'}
             </button>
             <a
               href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
@@ -174,8 +178,9 @@ export default function Navigation() {
               className="inline-flex items-center gap-2 bg-[#25d366] hover:bg-[#128c7e] text-white font-bold px-4 py-2.5 rounded-full transition-all shadow-md"
             >
               <Phone size={16} />
-              Foglalás WhatsAppon
+              {en ? 'Book on WhatsApp' : 'Foglalás WhatsAppon'}
             </a>
+            <div className="flex items-center gap-2 border-t pt-3"><span className="text-sm font-semibold text-slate-500">Language:</span><button onClick={() => setLanguage('hu')} className={`rounded-lg px-3 py-2 text-sm font-bold ${language === 'hu' ? 'bg-sky-600 text-white' : 'bg-slate-100'}`}>Magyar</button><button onClick={() => setLanguage('en')} className={`rounded-lg px-3 py-2 text-sm font-bold ${language === 'en' ? 'bg-sky-600 text-white' : 'bg-slate-100'}`}>English</button></div>
           </div>
         </div>
       )}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Wind, Sun, Cloud, CloudRain } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n';
 
 interface WeatherData {
   temp: number;
@@ -12,6 +13,8 @@ interface WeatherData {
 }
 
 export default function InfoBar() {
+  const { language } = useLanguage();
+  const en = language === 'en';
   const [weather, setWeather] = useState<WeatherData | null>(null);
 
   useEffect(() => {
@@ -86,7 +89,7 @@ export default function InfoBar() {
 
           {/* Payment */}
           <div className="flex items-center gap-2 text-[#64748b] text-xs sm:text-sm">
-            <span>Fizetés: EUR / USD / Revolut / Wise</span>
+              <span>{en ? 'Payment' : 'Fizetés'}: EUR / USD / Revolut / Wise</span>
           </div>
 
           <span className="hidden sm:inline text-[#cbd5e1]">|</span>
@@ -94,7 +97,7 @@ export default function InfoBar() {
           {/* Timing - HIGHLIGHTED */}
           <div className="w-full sm:w-auto mt-1 sm:mt-0">
             <p className="text-[#1e293b] font-bold text-sm sm:text-base leading-snug bg-[#fef3c7] rounded-lg px-3 py-2 border border-[#fcd34d] inline-block">
-              A pontos transzfer érkezési időpontot mindig a program előtti este 20:00 körül küldjük
+              {en ? 'We send the exact pick-up time at around 20:00 on the evening before the excursion' : 'A pontos transzfer érkezési időpontot mindig a program előtti este 20:00 körül küldjük'}
             </p>
           </div>
         </div>

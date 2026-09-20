@@ -1,6 +1,8 @@
-import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import { Download, KeyRound, Loader2, LogIn, LogOut, Mail, RefreshCw, Search, Send, Upload, Users } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import type { FormEvent } from 'react'
+import { BarChart3, Download, KeyRound, Loader2, LogIn, LogOut, Mail, RefreshCw, Search, Send, Upload, Users } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import AccountingAdmin from '@/pages/AccountingAdmin'
 
 type Subscriber = {
   email: string
@@ -45,6 +47,7 @@ export default function Admin() {
   const [importPreview, setImportPreview] = useState<string[]>([])
   const [importText, setImportText] = useState('')
   const [importFileName, setImportFileName] = useState('')
+  const [adminView, setAdminView] = useState<'accounting' | 'newsletter'>('accounting')
 
   const checkAdmin = useCallback(async () => {
     // A böngészőben korábbról megmaradhatott egy másik projekt munkamenete.
@@ -358,9 +361,16 @@ export default function Admin() {
   return (
     <main className="mx-auto max-w-[1200px] px-4 py-10 sm:px-6">
       <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
-        <div><h1 className="text-3xl font-bold text-slate-900">Hírlevél admin</h1><p className="text-slate-500">Feliratkozók és e-mail-kampányok kezelése</p></div>
+        <div><h1 className="text-3xl font-bold text-slate-900">Hurghada admin</h1><p className="text-slate-500">Foglalások, elszámolás és hírlevél kezelése</p></div>
         <button onClick={() => supabase.auth.signOut()} className="inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm"><LogOut size={17} /> Kilépés</button>
       </div>
+
+      <div className="mb-7 inline-flex w-full rounded-2xl border bg-white p-1.5 shadow-sm sm:w-auto">
+        <button onClick={() => setAdminView('accounting')} className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold transition sm:flex-none ${adminView === 'accounting' ? 'bg-sky-600 text-white shadow' : 'text-slate-600 hover:bg-slate-50'}`}><BarChart3 size={18} /> Elszámolás</button>
+        <button onClick={() => setAdminView('newsletter')} className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold transition sm:flex-none ${adminView === 'newsletter' ? 'bg-sky-600 text-white shadow' : 'text-slate-600 hover:bg-slate-50'}`}><Mail size={18} /> Hírlevél</button>
+      </div>
+
+      {adminView === 'accounting' ? <AccountingAdmin /> : <>
 
       <div className="mb-7 grid gap-4 sm:grid-cols-3">
         <Stat icon={<Users />} label="Összes feliratkozó" value={subscribers.length} />
@@ -459,7 +469,7 @@ export default function Admin() {
             </tr></thead>
             <tbody>
               {filtered.map((item) => <tr key={item.email} className="border-t">
-                <td className="p-3"><input type="checkbox" disabled={item.status !== 'active'} checked={selected.has(item.email)} onChange={() => setSelected((current) => { const next = new Set(current); next.has(item.email) ? next.delete(item.email) : next.add(item.email); return next })} /></td>
+                <td className="p-3"><input type="checkbox" disabled={item.status !== 'active'} checked={selected.has(item.email)} onChange={() => setSelected((current) => { const next = new Set(current); if (next.has(item.email)) next.delete(item.email); else next.add(item.email); return next })} /></td>
                 <td className="p-3 font-medium">{item.email}</td>
                 <td className="p-3"><span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${item.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600'}`}>{item.status === 'active' ? 'Aktív' : 'Leiratkozott'}</span></td>
                 <td className="p-3 text-slate-500">{new Date(item.consent_at).toLocaleString('hu-HU')}</td>
@@ -472,6 +482,7 @@ export default function Admin() {
           </table>
         </div>
       </section>
+      </>}
     </main>
   )
 }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Anchor, Sun, Landmark, Users, LayoutGrid } from 'lucide-react';
 import { programs, categories } from '@/data/programs';
 import ProgramCard from './ProgramCard';
+import { useLanguage } from '@/lib/i18n';
 
 const iconMap: Record<string, React.ElementType> = {
   Anchor,
@@ -13,6 +14,8 @@ const iconMap: Record<string, React.ElementType> = {
 
 export default function ProgramsSection() {
   const navigate = useNavigate();
+  const { language } = useLanguage();
+  const en = language === 'en';
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
   const filteredPrograms = activeCategory === 'all'
@@ -25,10 +28,10 @@ export default function ProgramsSection() {
         {/* Section Header */}
         <div className="text-center mb-10">
           <h2 className="text-[#1e293b] font-bold text-3xl sm:text-4xl mb-3">
-            Programjaink
+            {en ? 'Our excursions' : 'Programjaink'}
           </h2>
           <p className="text-[#64748b] text-base sm:text-lg max-w-xl mx-auto">
-            Válassz a kategóriák közül és találd meg a tökéletes programot
+            {en ? 'Choose a category and find the perfect Hurghada experience' : 'Válassz a kategóriák közül és találd meg a tökéletes programot'}
           </p>
         </div>
 
@@ -43,7 +46,7 @@ export default function ProgramsSection() {
             }`}
           >
             <LayoutGrid size={16} />
-            Összes program
+            {en ? 'All excursions' : 'Összes program'}
           </button>
           {categories.map((cat) => {
             const Icon = iconMap[cat.icon];
@@ -59,7 +62,7 @@ export default function ProgramsSection() {
                 }`}
               >
                 {Icon && <Icon size={16} />}
-                {cat.label}
+                {en ? ({ tengeri: 'Sea trips', sivatagi: 'Desert trips', varosnezes: 'Sightseeing', csaldi: 'Family activities' }[cat.id]) : cat.label}
               </button>
             );
           })}
@@ -80,7 +83,7 @@ export default function ProgramsSection() {
         {/* Empty State */}
         {filteredPrograms.length === 0 && (
           <div className="text-center py-12 text-[#64748b]">
-            Ebben a kategóriában jelenleg nincsenek programok.
+            {en ? 'There are currently no excursions in this category.' : 'Ebben a kategóriában jelenleg nincsenek programok.'}
           </div>
         )}
       </div>
