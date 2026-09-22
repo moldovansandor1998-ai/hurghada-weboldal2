@@ -33,6 +33,7 @@ function SignupForm({ compact = false, onSubscribed }: { compact?: boolean; onSu
       return
     }
     setSuccess(true)
+    try { await fetch('/api/send-newsletter-coupon',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:normalized,name:name.trim(),code:data?.code,expires_at:data?.expires_at})}) } catch {}
     setMessage((en ? 'Your 5% coupon: ' : 'Az 5%-os kuponod: ') + (data?.code || ''))
     setEmail(''); setName(''); setPhone('')
     if (data !== 'already_active') window.setTimeout(() => onSubscribed?.(), 1600)
