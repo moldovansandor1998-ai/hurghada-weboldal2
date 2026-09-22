@@ -13,6 +13,9 @@ type Subscriber = {
   unsubscribed_at: string | null
   created_at: string
   last_campaign_at: string | null
+  full_name?: string | null
+  phone?: string | null
+  sms_consent?: boolean
 }
 
 const campaignEndpoint = '/api/send-newsletter'
@@ -49,6 +52,9 @@ export default function Admin() {
   const [importText, setImportText] = useState('')
   const [importFileName, setImportFileName] = useState('')
   const [adminView, setAdminView] = useState<'accounting' | 'newsletter' | 'photos'>('accounting')
+  const [smsText,setSmsText]=useState('Hurghada Programok: Új programok és ajánlatok érkeztek! Nézd meg: https://hurghadaprogramok.hu')
+  const [testPhone,setTestPhone]=useState('')
+  const [smsSending,setSmsSending]=useState(false)
 
   const checkAdmin = useCallback(async () => {
     // A böngészőben korábbról megmaradhatott egy másik projekt munkamenete.
@@ -89,7 +95,7 @@ export default function Admin() {
     setLoading(true)
     const { data, error } = await supabase
       .from('newsletter_subscribers')
-      .select('email,status,source,consent_at,unsubscribed_at,created_at,last_campaign_at')
+      .select('email,status,source,consent_at,unsubscribed_at,created_at,last_campaign_at,full_name,phone,sms_consent')
       .order('created_at', { ascending: false })
       .limit(10000)
     setLoading(false)
@@ -241,6 +247,10 @@ export default function Admin() {
       setSending(null)
     }
   }
+
+  const sendSms = async (to:string) => { const {data:{session}}=await supabase.auth.getSession(); if(!session?.access_token){setNotice('Jelentkezz be újra.');return false} const r=await fetch('/api/send-sms',{method:'POST',headers:{Authorization:'Bearer '+session.access_token,'Content-Type':'application/json'},body:JSON.stringify({to,text:smsText.trim()})});const j=await r.json().catch(()=>({}));if(!r.ok){setNotice('SMS hiba: '+(j.error||'ismeretlen hiba'));return false}return true }
+  const sendTestSms=async()=>{if(!testPhone.trim()||!smsText.trim())return setNotice('Adj meg telefonszámot és üzenetet.');setSmsSending(true);const ok=await sendSms(testPhone.trim());setSmsSending(false);if(ok)setNotice('Teszt SMS elküldve.')}
+  const sendSmsBroadcast=async()=>{const list=subscribers.filter(x=>x.status==='active'&&x.sms_consent&&x.phone);if(!list.length)return setNotice('Nincs SMS-re jogosult telefonszám.');if(!confirm(`Biztosan elküldöd ${list.length} telefonszámra?`))return;setSmsSending(true);let sent=0;for(const x of list){if(await sendSms(x.phone!))sent++;else break}setSmsSending(false);setNotice(`SMS küldés kész: ${sent} / ${list.length}`)}
 
   const changePassword = async (event: FormEvent) => {
     event.preventDefault()
@@ -450,6 +460,8 @@ export default function Admin() {
           {notice && <p className="rounded-xl bg-sky-50 px-4 py-3 text-sm text-sky-800">{notice}</p>}
         </div>
       </section>
+
+      <section className="mb-8 rounded-3xl border bg-white p-5 shadow-sm sm:p-7"><div className="flex items-center justify-between gap-3"><div><h2 className="text-xl font-bold">SMS-kampány</h2><p className="text-sm text-slate-500">seven.io · csak SMS-hozzájárulással rendelkező aktív címzettek</p></div><span className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-bold text-emerald-700">{subscribers.filter(x=>x.status==='active'&&x.sms_consent&&x.phone).length} SMS címzett</span></div><textarea value={smsText} onChange={e=>setSmsText(e.target.value)} rows={4} maxLength={480} className="mt-4 w-full rounded-xl border p-4" /><div className="mt-2 text-xs text-slate-500">{smsText.length} karakter · kb. {Math.max(1,Math.ceil(smsText.length/160))} SMS-szegmens</div><div className="mt-4 flex flex-col gap-2 sm:flex-row"><input value={testPhone} onChange={e=>setTestPhone(e.target.value)} placeholder="+36..." className="min-h-11 flex-1 rounded-xl border px-4"/><button disabled={smsSending} onClick={sendTestSms} className="rounded-xl border px-5 py-2 font-bold">Teszt SMS</button><button disabled={smsSending} onClick={sendSmsBroadcast} className="rounded-xl bg-emerald-600 px-5 py-2 font-bold text-white disabled:opacity-50">{smsSending?'Küldés...':'Küldés minden SMS címzettnek'}</button></div></section>
 
       <section className="rounded-3xl border bg-white p-5 shadow-sm sm:p-7">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
