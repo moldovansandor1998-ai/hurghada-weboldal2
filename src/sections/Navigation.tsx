@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Phone, BookOpen, Gift, AlertTriangle } from 'lucide-react';
+import { Menu, X, Phone, BookOpen, Gift, AlertTriangle, Camera } from 'lucide-react';
 import { WHATSAPP_NUMBER } from '@/data/programs';
 import { useLanguage } from '@/lib/i18n';
 
@@ -72,6 +72,7 @@ export default function Navigation() {
               <Gift size={14} />
               {en ? 'Offers' : 'Ajánlatok'}
             </button>
+            <button onClick={() => navigate('/vendegeink-fotoi')} className={`font-medium text-sm transition-colors inline-flex items-center gap-1 ${location.pathname==='/vendegeink-fotoi'?'text-[#0284c7]':'text-[#1e293b] hover:text-[#0284c7]'}`}><Camera size={14}/>{en?'Guest photos':'Vendégfotók'}</button>
             <button
               onClick={() => { navigate('/blog'); }}
               className={`font-medium text-sm transition-colors inline-flex items-center gap-1 ${
@@ -154,6 +155,7 @@ export default function Navigation() {
               <Gift size={16} />
               {en ? 'Offers' : 'Ajánlatok'}
             </button>
+            <button onClick={() => { navigate('/vendegeink-fotoi'); setIsMobileMenuOpen(false); }} className="block w-full text-left font-medium py-2 inline-flex items-center gap-2 text-[#1e293b]"><Camera size={16}/>{en?'Guest photos':'Vendégfotók'}</button>
             <button
               onClick={() => { navigate('/blog'); setIsMobileMenuOpen(false); }}
               className={`block w-full text-left font-medium py-2 transition-colors inline-flex items-center gap-2 ${
