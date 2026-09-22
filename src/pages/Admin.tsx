@@ -21,6 +21,13 @@ type Subscriber = {
 const campaignEndpoint = '/api/send-newsletter'
 const adminEmail = 'moldovansandor1998@gmail.com'
 
+const normalizeSmsPhone = (raw: string) => {
+  let d = String(raw || '').replace(/[^0-9]/g, '')
+  if (d.startsWith('06')) d = '36' + d.slice(2)
+  else if (d.length === 9 && /^(20|30|31|50|70)/.test(d)) d = '36' + d
+  return d
+}
+
 const extractEmails = (text: string) => [...new Set(
   (text.match(/[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)+/gi) ?? [])
     .map((email) => email.trim().toLowerCase().replace(/[.)]+$/, ''))
@@ -108,10 +115,10 @@ export default function Admin() {
     }
     setSubscribers((data ?? []) as Subscriber[])
     const bookingResult = await supabase.from('excursion_bookings').select('phone').limit(10000)
-    const normalizedPhones = (bookingResult.data ?? []).map((row) => String(row.phone ?? '').trim()).filter(Boolean)
-    setBookingPhones(Array.from(new Set(normalizedPhones)))
+    const normalizedPhones = (bookingResult.data ?? []).map((row) => normalizeSmsPhone(String(row.phone ?? ''))).filter((p) => p.length >= 10)
+    setBookingPhones(Array.from(new Set(normalizedPhones)).map((p) => '+' + p))
     const {data:sentRows}=await supabase.from('sms_messages').select('recipient,message').like('message','Koszonjuk, hogy korabban velunk kirandult!%').limit(10000)
-    const sentPhones=Array.from(new Set((sentRows??[]).map(r=>String(r.recipient??'').replace(/[^0-9]/g,''))))
+    const sentPhones=Array.from(new Set((sentRows??[]).map(r=>normalizeSmsPhone(String(r.recipient??''))).filter(Boolean)))
     setCampaignSentPhones(sentPhones)
   }, [isAdmin])
 
@@ -260,7 +267,7 @@ export default function Admin() {
   const sendSms = async (to:string) => { const {data:{session}}=await supabase.auth.getSession(); if(!session?.access_token){setNotice('Jelentkezz be újra.');return false} const r=await fetch('/api/send-sms',{method:'POST',headers:{Authorization:'Bearer '+session.access_token,'Content-Type':'application/json'},body:JSON.stringify({to,text:smsText.trim()})});const j=await r.json().catch(()=>({}));if(!r.ok||!j.ok){setNotice('SMS hiba: '+(j.error||JSON.stringify(j.result)||'ismeretlen hiba'));return false}if(j.message_id)setLastSms({id:String(j.message_id),status:'ACCEPTED'});setNotice('seven.io elfogadta az SMS-t. SMS ID: '+(j.message_id||'-'));return true }
   const checkSmsStatus=async()=>{if(!lastSms)return;const {data:{session}}=await supabase.auth.getSession();const r=await fetch('/api/sms-status?id='+encodeURIComponent(lastSms.id),{headers:{Authorization:'Bearer '+session?.access_token}});const j=await r.json();setLastSms(v=>v?{...v,status:j.status||'PENDING'}:v);setNotice('SMS kézbesítési állapot: '+(j.status||'PENDING')+(j.status_time?' · '+j.status_time:''))}
     const sendTestSms=async()=>{if(!testPhone.trim()||!smsText.trim())return setNotice('Adj meg telefonszámot és üzenetet.');setSmsSending(true);const ok=await sendSms(testPhone.trim());setSmsSending(false);if(ok)setNotice('Teszt SMS elküldve.')}
-  const sendBookingSmsBroadcast=async()=>{const already=new Set(campaignSentPhones);const pending=bookingPhones.filter(phone=>!already.has(phone.replace(/[^0-9]/g,'')));if(!pending.length){setNotice('Minden korábbi vendéghez már elindult ez a kampány.');return}if(!window.confirm('Folytatod a kampányt? Már elindítva: '+already.size+' · Hátra: '+pending.length+'.'))return;setSmsSending(true);let sent=0;for(const phone of pending){if(await sendSms(phone)){sent++;already.add(phone.replace(/[^0-9]/g,''));setCampaignSentPhones(Array.from(already))}else break}setSmsSending(false);setNotice('Kampány folytatva: '+sent+' új SMS. Összesen elindítva: '+already.size+' / '+bookingPhones.length)}
+  const sendBookingSmsBroadcast=async()=>{const already=new Set(campaignSentPhones);const pending=bookingPhones.filter(phone=>!already.has(normalizeSmsPhone(phone)));const doneCount=bookingPhones.filter(phone=>already.has(normalizeSmsPhone(phone))).length;if(!pending.length){setNotice('Minden korábbi vendéghez már elindult ez a kampány.');return}if(!window.confirm('Folytatod a kampányt? Már elindítva: '+doneCount+' · Hátra: '+pending.length+'.'))return;setSmsSending(true);let sent=0;for(const phone of pending){if(await sendSms(phone)){sent++;already.add(normalizeSmsPhone(phone));setCampaignSentPhones(Array.from(already))}else break}setSmsSending(false);const finalDone=bookingPhones.filter(phone=>already.has(normalizeSmsPhone(phone))).length;setNotice('Kampány folytatva: '+sent+' új SMS. Összesen elindítva: '+finalDone+' / '+bookingPhones.length)}
   const sendSmsBroadcast=async()=>{const list=subscribers.filter(x=>x.status==='active'&&x.sms_consent&&x.phone);if(!list.length)return setNotice('Nincs SMS-re jogosult telefonszám.');if(!confirm(`Biztosan elküldöd ${list.length} telefonszámra?`))return;setSmsSending(true);let sent=0;for(const x of list){if(await sendSms(x.phone!))sent++;else break}setSmsSending(false);setNotice(`SMS küldés kész: ${sent} / ${list.length}`)}
 
   const changePassword = async (event: FormEvent) => {
@@ -472,7 +479,7 @@ export default function Admin() {
         </div>
       </section>
 
-      <section className="mb-8 rounded-3xl border bg-white p-5 shadow-sm sm:p-7"><div className="flex items-center justify-between gap-3"><div><h2 className="text-xl font-bold">SMS-kampány</h2><p className="text-sm text-slate-500">seven.io · alapértelmezett számos feladó · csak SMS-hozzájárulással rendelkező aktív címzettek</p></div><span className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-bold text-emerald-700">{subscribers.filter(x=>x.status==='active'&&x.sms_consent&&x.phone).length} SMS címzett</span></div><textarea value={smsText} onChange={e=>setSmsText(e.target.value)} rows={4} maxLength={480} className="mt-4 w-full rounded-xl border p-4" /><div className="mt-2 text-xs text-slate-500">{smsText.length} karakter · kb. {Math.max(1,Math.ceil(smsText.length/160))} SMS-szegmens</div><div className="mt-4 flex flex-col gap-2 sm:flex-row"><input value={testPhone} onChange={e=>setTestPhone(e.target.value)} placeholder="+36..." className="min-h-11 flex-1 rounded-xl border px-4"/><button disabled={smsSending} onClick={sendTestSms} className="rounded-xl border px-5 py-2 font-bold">Teszt SMS</button>{lastSms&&<button onClick={checkSmsStatus} className="rounded-xl bg-sky-50 px-5 py-2 font-bold text-sky-700">Állapot: {lastSms.status} · Frissítés</button>}<button disabled={smsSending||bookingPhones.length===0} onClick={sendBookingSmsBroadcast} className="rounded-xl bg-sky-600 px-5 py-2 font-bold text-white disabled:opacity-50">Folytatás · hátra: {Math.max(0,bookingPhones.length-campaignSentPhones.length)}</button><button disabled={smsSending} onClick={sendSmsBroadcast} className="rounded-xl bg-emerald-600 px-5 py-2 font-bold text-white disabled:opacity-50">{smsSending?'Küldés...':'Küldés minden SMS címzettnek'}</button></div></section>
+      <section className="mb-8 rounded-3xl border bg-white p-5 shadow-sm sm:p-7"><div className="flex items-center justify-between gap-3"><div><h2 className="text-xl font-bold">SMS-kampány</h2><p className="text-sm text-slate-500">seven.io · alapértelmezett számos feladó · csak SMS-hozzájárulással rendelkező aktív címzettek</p></div><span className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-bold text-emerald-700">{subscribers.filter(x=>x.status==='active'&&x.sms_consent&&x.phone).length} SMS címzett</span></div><textarea value={smsText} onChange={e=>setSmsText(e.target.value)} rows={4} maxLength={480} className="mt-4 w-full rounded-xl border p-4" /><div className="mt-2 text-xs text-slate-500">{smsText.length} karakter · kb. {Math.max(1,Math.ceil(smsText.length/160))} SMS-szegmens</div><div className="mt-4 flex flex-col gap-2 sm:flex-row"><input value={testPhone} onChange={e=>setTestPhone(e.target.value)} placeholder="+36..." className="min-h-11 flex-1 rounded-xl border px-4"/><button disabled={smsSending} onClick={sendTestSms} className="rounded-xl border px-5 py-2 font-bold">Teszt SMS</button>{lastSms&&<button onClick={checkSmsStatus} className="rounded-xl bg-sky-50 px-5 py-2 font-bold text-sky-700">Állapot: {lastSms.status} · Frissítés</button>}<button disabled={smsSending||bookingPhones.length===0} onClick={sendBookingSmsBroadcast} className="rounded-xl bg-sky-600 px-5 py-2 font-bold text-white disabled:opacity-50">Folytatás · hátra: {bookingPhones.filter(phone=>!new Set(campaignSentPhones).has(normalizeSmsPhone(phone))).length}</button><button disabled={smsSending} onClick={sendSmsBroadcast} className="rounded-xl bg-emerald-600 px-5 py-2 font-bold text-white disabled:opacity-50">{smsSending?'Küldés...':'Küldés minden SMS címzettnek'}</button></div></section>
 
       <section className="rounded-3xl border bg-white p-5 shadow-sm sm:p-7">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
