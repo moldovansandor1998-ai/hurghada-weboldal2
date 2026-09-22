@@ -1,0 +1,22 @@
+import { useEffect, useState } from 'react';
+import { Camera, Gift, Upload } from 'lucide-react';
+import { programs } from '@/data/programs';
+import { supabase } from '@/lib/supabase';
+
+type Photo={id:string;guest_name:string;program_id:string;program_name:string;photo_url:string};
+export default function GuestPhotos(){
+ const [photos,setPhotos]=useState<Photo[]>([]); const [programId,setProgramId]=useState(programs[0]?.id||'');
+ const [name,setName]=useState(''); const [contact,setContact]=useState(''); const [file,setFile]=useState<File|null>(null); const [msg,setMsg]=useState(''); const [busy,setBusy]=useState(false);
+ useEffect(()=>{supabase.from('guest_photos').select('id,guest_name,program_id,program_name,photo_url').eq('status','approved').order('created_at',{ascending:false}).then(({data})=>setPhotos((data||[]) as Photo[]))},[]);
+ async function submit(e:React.FormEvent){e.preventDefault(); if(!file||!name.trim()||!contact.trim())return; setBusy(true);setMsg('');
+  const p=programs.find(x=>x.id===programId); const ext=(file.name.split('.').pop()||'jpg').toLowerCase(); const path=`${programId}/${crypto.randomUUID()}.${ext}`;
+  const up=await supabase.storage.from('guest-photos').upload(path,file,{contentType:file.type,upsert:false});
+  if(up.error){setMsg('A kép feltöltése nem sikerült.');setBusy(false);return}
+  const url=supabase.storage.from('guest-photos').getPublicUrl(path).data.publicUrl;
+  const ins=await supabase.from('guest_photos').insert({guest_name:name.trim(),contact:contact.trim(),program_id:programId,program_name:p?.name||programId,photo_url:url,storage_path:path,consent_website:true});
+  setMsg(ins.error?'A beküldés nem sikerült.':'Köszönjük! Jóváhagyás után automatikusan elkészítjük a 10 €-s, 1 évig érvényes utalványodat.'); if(!ins.error){setName('');setContact('');setFile(null)} setBusy(false);
+ }
+ return <main className="max-w-6xl mx-auto px-4 py-24"><section className="rounded-3xl bg-sky-600 text-white p-7 md:p-10 mb-10"><Camera className="mb-3"/><h1 className="text-3xl md:text-4xl font-extrabold">A te fotód is 10 €-t ér 📸</h1><p className="mt-3 max-w-2xl">Jártál már velünk? Tölts fel egy saját élményfotót. Jóváhagyás után 10 € értékű, 1 évig érvényes, egyszer felhasználható utalványt kapsz, amit családtagodnak vagy ismerősödnek is odaadhatsz.</p></section>
+ <form onSubmit={submit} className="bg-white border rounded-2xl p-5 md:p-7 shadow-sm grid gap-4 mb-12"><h2 className="font-bold text-xl flex gap-2 items-center"><Gift/> Fotó feltöltése</h2><input className="border rounded-xl p-3" placeholder="Neved" value={name} onChange={e=>setName(e.target.value)} required/><input className="border rounded-xl p-3" placeholder="E-mail vagy WhatsApp" value={contact} onChange={e=>setContact(e.target.value)} required/><select className="border rounded-xl p-3" value={programId} onChange={e=>setProgramId(e.target.value)}>{programs.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select><input className="border rounded-xl p-3" type="file" accept="image/jpeg,image/png,image/webp" onChange={e=>setFile(e.target.files?.[0]||null)} required/><label className="text-sm"><input type="checkbox" required className="mr-2"/>Hozzájárulok, hogy a jóváhagyott fotó megjelenjen a Hurghada Programok weboldalán.</label><button disabled={busy} className="bg-sky-600 text-white rounded-xl p-3 font-bold flex justify-center gap-2"><Upload size={20}/>{busy?'Feltöltés...':'Feltöltöm a fotót'}</button>{msg&&<p className="text-sm font-medium">{msg}</p>}</form>
+ <h2 className="text-2xl font-bold mb-5">Vendégeink fotói</h2><div className="grid grid-cols-2 md:grid-cols-4 gap-3">{photos.map(x=><figure key={x.id} className="rounded-xl overflow-hidden border bg-white"><img src={x.photo_url} className="aspect-square w-full object-cover" loading="lazy"/><figcaption className="p-2 text-xs"><b>{x.program_name}</b><br/>{x.guest_name}</figcaption></figure>)}</div></main>
+}
