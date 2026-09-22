@@ -3,6 +3,7 @@ import type { FormEvent } from 'react'
 import { BarChart3, Download, KeyRound, Loader2, LogIn, LogOut, Mail, RefreshCw, Search, Send, Upload, Users } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import AccountingAdmin from '@/pages/AccountingAdmin'
+import GuestPhotoAdmin from '@/pages/GuestPhotoAdmin'
 
 type Subscriber = {
   email: string
@@ -47,7 +48,7 @@ export default function Admin() {
   const [importPreview, setImportPreview] = useState<string[]>([])
   const [importText, setImportText] = useState('')
   const [importFileName, setImportFileName] = useState('')
-  const [adminView, setAdminView] = useState<'accounting' | 'newsletter'>('accounting')
+  const [adminView, setAdminView] = useState<'accounting' | 'newsletter' | 'photos'>('accounting')
 
   const checkAdmin = useCallback(async () => {
     // A böngészőben korábbról megmaradhatott egy másik projekt munkamenete.
@@ -367,10 +368,11 @@ export default function Admin() {
 
       <div className="mb-7 inline-flex w-full rounded-2xl border bg-white p-1.5 shadow-sm sm:w-auto">
         <button onClick={() => setAdminView('accounting')} className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold transition sm:flex-none ${adminView === 'accounting' ? 'bg-sky-600 text-white shadow' : 'text-slate-600 hover:bg-slate-50'}`}><BarChart3 size={18} /> Elszámolás</button>
+        <button onClick={() => setAdminView('photos')} className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold transition sm:flex-none ${adminView === 'photos' ? 'bg-sky-600 text-white shadow' : 'text-slate-600 hover:bg-slate-50'}`}><Upload size={18} /> Vendégfotók</button>
         <button onClick={() => setAdminView('newsletter')} className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl px-5 text-sm font-bold transition sm:flex-none ${adminView === 'newsletter' ? 'bg-sky-600 text-white shadow' : 'text-slate-600 hover:bg-slate-50'}`}><Mail size={18} /> Hírlevél</button>
       </div>
 
-      {adminView === 'accounting' ? <AccountingAdmin /> : <>
+      {adminView === 'accounting' ? <AccountingAdmin /> : adminView === 'photos' ? <GuestPhotoAdmin /> : <>
 
       <div className="mb-7 grid gap-4 sm:grid-cols-3">
         <Stat icon={<Users />} label="Összes feliratkozó" value={subscribers.length} />

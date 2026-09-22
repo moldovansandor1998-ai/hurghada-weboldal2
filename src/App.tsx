@@ -15,6 +15,7 @@ import Admin from '@/pages/Admin';
 import NewsletterSection from '@/sections/NewsletterSection';
 import { LanguageProvider, useLanguage } from '@/lib/i18n';
 import ImportantInformationEn from '@/pages/ImportantInformationEn';
+import GuestPhotos from '@/pages/GuestPhotos';
 
 function HomePage() {
   return (
@@ -47,6 +48,7 @@ function App() {
           <Route path="/ajanlatok" element={<OffersSection />} />
           <Route path="/fontos-informaciok" element={<LocalizedImportantInformation />} />
           <Route path="/program/:programId" element={<ProgramPage />} />
+          <Route path="/vendegeink-fotoi" element={<GuestPhotos />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </div>

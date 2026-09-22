@@ -2,6 +2,7 @@ import { X, MessageCircle, CreditCard, Ban, Clock, Calendar, Bus, AlertTriangle,
 import type { Program } from '@/data/programs';
 import { WHATSAPP_NUMBER, IMPORTANT_INFO } from '@/data/programs';
 import { localizeProgram, useLanguage } from '@/lib/i18n';
+import GuestPhotoStrip from '@/components/GuestPhotoStrip';
 
 interface ProgramDetailsProps {
   program: Program | null;
@@ -296,6 +297,8 @@ export default function ProgramDetails({ program, onClose }: ProgramDetailsProps
               );
             })}
           </div>
+
+          <GuestPhotoStrip programId={program.id} />
 
           {/* Important Info */}
           <div className="bg-[#fff7ed] rounded-xl p-4 border border-[#fed7aa]">
