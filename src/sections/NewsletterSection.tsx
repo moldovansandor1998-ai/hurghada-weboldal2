@@ -8,6 +8,8 @@ function SignupForm({ compact = false, onSubscribed }: { compact?: boolean; onSu
   const { language } = useLanguage()
   const en = language === 'en'
   const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [success, setSuccess] = useState(false)
@@ -15,6 +17,7 @@ function SignupForm({ compact = false, onSubscribed }: { compact?: boolean; onSu
   const subscribe = async (event: FormEvent) => {
     event.preventDefault()
     const normalized = email.trim().toLowerCase()
+    if (name.trim().length < 2 || phone.replace(/\\D/g, '').length < 7) { setSuccess(false); setMessage(en ? 'Please enter your name and WhatsApp number.' : 'Add meg a neved és a WhatsApp telefonszámod.'); return }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
       setSuccess(false)
       setMessage(en ? 'Please enter a valid email address.' : 'Kérjük, adj meg egy érvényes e-mail-címet.')
@@ -22,7 +25,7 @@ function SignupForm({ compact = false, onSubscribed }: { compact?: boolean; onSu
     }
     setLoading(true)
     setMessage('')
-    const { data, error } = await supabase.rpc('subscribe_newsletter', { p_email: normalized })
+    const { data, error } = await supabase.rpc('subscribe_newsletter', { p_email: normalized, p_name: name.trim(), p_phone: phone.trim() })
     setLoading(false)
     if (error) {
       setSuccess(false)
@@ -30,14 +33,16 @@ function SignupForm({ compact = false, onSubscribed }: { compact?: boolean; onSu
       return
     }
     setSuccess(true)
-    setMessage(data === 'already_active' ? (en ? 'This email address is already subscribed.' : 'Ezzel az e-mail-címmel már feliratkoztál.') : (en ? 'You have successfully subscribed!' : 'Sikeresen feliratkoztál!'))
-    setEmail('')
+    setMessage((en ? 'Your 5% coupon: ' : 'Az 5%-os kuponod: ') + (data?.code || ''))
+    setEmail(''); setName(''); setPhone('')
     if (data !== 'already_active') window.setTimeout(() => onSubscribed?.(), 1600)
   }
 
   return (
     <form onSubmit={subscribe} className={compact ? 'mt-5' : 'mx-auto mt-7 max-w-xl'}>
       <div className={compact ? 'grid gap-3' : 'flex flex-col gap-3 sm:flex-row'}>
+        <input required value={name} onChange={(e) => setName(e.target.value)} placeholder={en ? 'Your name' : 'Neved'} className="min-h-12 flex-1 rounded-full border border-slate-200 bg-slate-50 px-5 text-base text-slate-900 outline-none ring-orange-400 focus:ring-4" />
+        <input required type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder={en ? 'WhatsApp number' : 'WhatsApp telefonszám'} className="min-h-12 flex-1 rounded-full border border-slate-200 bg-slate-50 px-5 text-base text-slate-900 outline-none ring-orange-400 focus:ring-4" />
         <label className="sr-only" htmlFor={compact ? 'popup-newsletter-email' : 'newsletter-email'}>{en ? 'Email address' : 'E-mail-cím'}</label>
         <input
           id={compact ? 'popup-newsletter-email' : 'newsletter-email'}
@@ -78,8 +83,8 @@ export default function NewsletterSection() {
           <div className="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:p-8">
             <button onClick={closePopup} aria-label={en ? 'Close' : 'Bezárás'} className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200"><X size={21} /></button>
             <div className="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl bg-sky-100 text-sky-700"><Mail size={28} /></div>
-            <h2 id="newsletter-popup-title" className="pr-8 text-center text-2xl font-bold text-slate-900">{en ? 'Do not miss the best Hurghada experiences!' : 'Ne maradj le a hurghadai élményekről!'}</h2>
-            <p className="mt-3 text-center leading-relaxed text-slate-600">{en ? 'Get updates about new excursions, special offers and useful Hurghada tips.' : 'Értesítünk az új programokról, különleges ajánlatokról és hasznos hurghadai tippekről.'}</p>
+            <h2 id="newsletter-popup-title" className="pr-8 text-center text-2xl font-bold text-slate-900">{en ? 'Get 5% off your next excursion!' : '🎁 5% KEDVEZMÉNY AZONNAL!'}</h2>
+            <p className="mt-3 text-center leading-relaxed text-slate-600">{en ? 'Subscribe and get 5% off your next excursion instantly. We will also send new programs and special offers.' : 'Iratkozz fel, és azonnal kapsz 5% kedvezményt a következő programodból! Emellett értesítünk az újdonságokról és ajánlatokról.'}</p>
             <SignupForm compact onSubscribed={closePopup} />
             <p className="mt-4 text-center text-xs leading-relaxed text-slate-500">{en ? 'You can unsubscribe at any time.' : 'Bármikor egy kattintással leiratkozhatsz.'}</p>
           </div>
