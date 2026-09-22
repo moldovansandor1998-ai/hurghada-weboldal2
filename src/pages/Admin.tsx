@@ -52,7 +52,7 @@ export default function Admin() {
   const [importText, setImportText] = useState('')
   const [importFileName, setImportFileName] = useState('')
   const [adminView, setAdminView] = useState<'accounting' | 'newsletter' | 'photos'>('accounting')
-  const [smsText,setSmsText]=useState('szia')
+  const [smsText,setSmsText]=useState('Koszonjuk, hogy velunk kirandult! Varjuk ujra! 5 fotoval 10 EUR kupont kapsz, 1 evig ervenyes es atadhato. Toltsd fel: hurghadaprogramok.hu/vendegeink-fotoi')
   const [testPhone,setTestPhone]=useState('')
   const [smsSending,setSmsSending]=useState(false)
   const [lastSms,setLastSms]=useState<{id:string;status:string}|null>(null)
