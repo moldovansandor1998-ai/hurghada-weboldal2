@@ -109,7 +109,7 @@ Gyermekek:
     image: '/images/kairo-piramisok.jpg',
     tagline: 'A klasszikus kairói élmény magyar idegenvezetéssel – piramisok, Szfinx és az ókori Egyiptom története.',
     highlight: 'Piramisok + Szfinx + Egyiptomi Múzeum',
-    duration: 'Indulás: kb. 01:00–02:00, Visszaérkezés: kb. 20:00–21:00',
+    duration: 'Indulás: kb. 01:00–02:00, Visszaérkezés: kb. 23:00',
     availability: 'Minden nap',
     guideInfo: '15 fő felett magyar idegenvezető – teljesen privát túra\nKisebb csoportnál angol / német nyelvű idegenvezetés',
     fullDescription: `Ez a program a hagyományos, ikonikus kairói élményt kínálja azok számára, akik szeretnék valóban megérteni azt, amit látnak. A privát transzfernek köszönhetően a nap kényelmesen, szervezetten és kiszámíthatóan telik, a magyar idegenvezetés pedig biztosítja, hogy a történelem ne csak látvány, hanem élő történet legyen. A program 15 fő felett magyar nyelvű idegenvezetővel, teljesen privát formában zajlik.
@@ -170,7 +170,7 @@ Gyermekek:
     image: '/images/kairo-gem.jpg',
     tagline: 'VIP kairói élmény a világ legmodernebb múzeumával – piramisok, Szfinx és a Grand Egyptian Museum.',
     highlight: 'Piramisok + Szfinx + Grand Egyptian Museum',
-    duration: 'Indulás: kb. 01:00–02:00, Visszaérkezés: kb. 22:00',
+    duration: 'Indulás: kb. 01:00–02:00, Visszaérkezés: kb. 23:00',
     availability: 'Minden nap',
     guideInfo: '15 fő felett magyar idegenvezető – teljesen privát túra\nKisebb csoportnál angol / német nyelvű idegenvezetés',
     fullDescription: `A VIP Kairó program azoknak készült, akik a klasszikus és a modern Egyiptomot egyszerre szeretnék felfedezni, kényelmes, privát formában. A saját transzfernek köszönhetően a nap gördülékenyen, rugalmas tempóban zajlik, míg a magyar idegenvezetés biztosítja, hogy a látottak valódi történelmi tartalommal teljenek meg. A program 15 fő felett magyar nyelvű idegenvezetővel, teljesen privát formában zajlik.
