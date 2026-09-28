@@ -15,4 +15,9 @@ export const manualGuestPhotos: ManualGuestPhoto[] = [
   { id: 'manual-quad-safari-02', program_id: 'quad-safari', program_name: 'Quad Safari – Sivatagi túra', photo_url: '/images/guest-photos/manual/2026-09-28/quad-safari-02.jpg' },
   { id: 'manual-quad-safari-03', program_id: 'quad-safari', program_name: 'Quad Safari – Sivatagi túra', photo_url: '/images/guest-photos/manual/2026-09-28/quad-safari-03.jpg' },
   { id: 'manual-quad-safari-04', program_id: 'quad-safari', program_name: 'Quad Safari – Sivatagi túra', photo_url: '/images/guest-photos/manual/2026-09-28/quad-safari-04.jpg' },
+
+  { id: 'manual-dolphin-house-01', program_id: 'dolphin-house', program_name: 'Dolphin House – Delfin kirándulás', photo_url: '/images/guest-photos/manual/2026-09-28/diving-01.jpg' },
+  { id: 'manual-dolphin-house-02', program_id: 'dolphin-house', program_name: 'Dolphin House – Delfin kirándulás', photo_url: '/images/guest-photos/manual/2026-09-28/diving-02.jpg' },
+  { id: 'manual-dolphin-house-03', program_id: 'dolphin-house', program_name: 'Dolphin House – Delfin kirándulás', photo_url: '/images/guest-photos/manual/2026-09-28/diving-03.jpg' },
+  { id: 'manual-dolphin-house-04', program_id: 'dolphin-house', program_name: 'Dolphin House – Delfin kirándulás', photo_url: '/images/guest-photos/manual/2026-09-28/diving-04.jpg' },
 ];
