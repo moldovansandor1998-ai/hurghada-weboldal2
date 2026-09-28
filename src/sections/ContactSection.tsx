@@ -7,14 +7,14 @@ export default function ContactSection() {
   const en = language === 'en';
   const importantNotes = en ? [
     'Most excursions can be booked one day before departure', 'The exact pick-up time is sent on the previous evening',
-    'Payment: Revolut / Wise / EUR / USD', 'Transfer surcharge from Makadi, Sahl Hasheesh and Safaga may apply per booking',
+    'Payment: Revolut / Wise / EUR / USD', 'Transfer surcharge from Makadi, Sahl Hasheesh, Safaga and El Gouna may apply per booking',
     'We are available on WhatsApp 24/7',
   ] : [
     'Nincs szükség előre foglalásra',
     'Elég 1 nappal előtte jelezni',
     'Fizetés a program indulásakor: Revolut / Wise / EUR / USD készpénz',
     'A pontos indulási időt előző este küldjük',
-    'Makadi, Sahl Hasheesh és Safaga területéről transzferdíj / program (egyszeri díj): 4 főig +10 €, 6 főig +15 €, 6 fő felett +25 €.',
+    'Makadi, Sahl Hasheesh, Safaga és El Gouna területéről transzferdíj / program (egyszeri díj): 4 főig +10 €, 6 főig +15 €, 6 fő felett +25 €.',
     'Csak WhatsAppon vagyunk elérhetőek 0–24',
   ];
 
