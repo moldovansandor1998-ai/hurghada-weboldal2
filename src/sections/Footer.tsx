@@ -12,7 +12,6 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} {language === 'en' ? 'Hurghada Excursions — All rights reserved.' : 'Hurghada Programok — Minden jog fenntartva.'}
           </p>
           <div className="mb-3 flex items-center justify-center gap-4 text-xs">
-            <Link to="/aszf" className="text-[#94a3b8] hover:text-white">{language === 'en' ? 'Terms' : 'ÁSZF'}</Link>
             <Link to="/admin" className="text-[#64748b] hover:text-white">Admin</Link>
           </div>
           <p className="text-[#64748b] text-xs flex items-center justify-center gap-1">
