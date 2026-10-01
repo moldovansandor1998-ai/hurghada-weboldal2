@@ -12,6 +12,8 @@ const packages = [
   { nameHu: 'Prémium élménycsomag', nameEn: 'Premium Experience', programsHu: ['VIP Orange Bay', 'VIP Hula Hula', 'Luxor – Királyok Völgye'], programsEn: ['VIP Orange Bay', 'VIP Hula Hula', 'Luxor – Valley of the Kings'], images: ['/images/vip-hajo-1.jpg', '/images/vip-hajo-2.jpg', '/images/luxor-kiralyok-volgye.jpg'], oldPrice: 180, price: 155 },
 ]
 
+const SHOW_PREPAID_PACKAGES = false
+
 export default function OffersSection() {
   const { language } = useLanguage()
   const en = language === 'en'
@@ -19,6 +21,7 @@ export default function OffersSection() {
 
   return <main className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-sky-50 pb-16 pt-24">
     <section className="mx-auto max-w-[1200px] px-4 sm:px-6">
+      {SHOW_PREPAID_PACKAGES && <>
       <div className="mx-auto mb-10 max-w-3xl text-center">
         <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-sm font-bold text-amber-800"><Sparkles size={17} />{en ? 'Limited prepaid prices' : 'Korlátozott ideig elérhető előrefizetős árak'}</div>
         <h1 className="text-3xl font-black text-slate-900 sm:text-5xl">{en ? 'Hurghada excursion packages' : 'Hurghadai programcsomagok'}</h1>
@@ -51,7 +54,9 @@ export default function OffersSection() {
         <div className="flex items-start gap-3"><AlertTriangle className="mt-0.5 shrink-0 text-amber-600" /><div><h2 className="font-black text-slate-900">{en ? 'Important package information' : 'Fontos tudnivalók a csomagokról'}</h2><p className="mt-2 text-sm leading-relaxed text-slate-700">{en ? 'Packages can be purchased until 31 December 2026 with full prepayment. Dates can be arranged later, subject to availability, weather and operating days. Package discounts cannot be combined with other promotions. Individual excursions remain available at their standard price with payment on the day.' : 'A csomagok 2026. december 31-ig, teljes előrefizetéssel vásárolhatók meg. A programnapok később egyeztethetők a szabad helyek, az időjárás és az indulási napok szerint. A csomagkedvezmény más akcióval nem vonható össze. Az egyes programok továbbra is foglalhatók normál áron, a program napján történő fizetéssel.'}</p><Link to="/aszf" className="mt-3 inline-block text-sm font-bold text-sky-700 underline underline-offset-4">{en ? 'Detailed terms and cancellation policy' : 'Részletes feltételek és lemondási szabályok az ÁSZF-ben'}</Link></div></div>
       </div>
 
-      <div className="mt-12 grid gap-6 lg:grid-cols-2">
+      </>}
+
+      <div className="grid gap-6 lg:grid-cols-2">
         <LegacyOffer title={en ? 'Free airport transfer' : 'Ingyenes reptéri transzfer'} color="sky" lines={en ? ['Free airport-to-hotel transfer', 'Free hotel-to-airport transfer', 'Minimum 5 guests and 4 excursions'] : ['Ingyenes transzfer a reptérről a hotelbe', 'Ingyenes visszaút a hotelből a reptérre', 'Minimum 5 fő és minimum 4 program']} />
         <LegacyOffer title={en ? '3+1 promotion' : '3+1 akció'} color="red" lines={en ? ['Book 3 excursions and get the 4th one free', 'The cheapest excursion is free', 'Cannot be combined with package prices'] : ['Foglalj 3 programot, és a 4. program ingyenes', 'A legolcsóbb program ingyenes', 'Csomagárakkal nem vonható össze']} />
       </div>
