@@ -1,6 +1,5 @@
 import { AlertTriangle, CalendarDays, Check, Gift, MessageCircle, ShieldCheck, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { useScrollAnimation } from '@/hooks/useScrollAnimation'
 import { WHATSAPP_NUMBER } from '@/data/programs'
 import { useLanguage } from '@/lib/i18n'
 
@@ -14,14 +13,13 @@ const packages = [
 ]
 
 export default function OffersSection() {
-  const { ref, isVisible } = useScrollAnimation()
   const { language } = useLanguage()
   const en = language === 'en'
   const whatsapp = (name: string) => `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent(en ? `Hello! I would like to book the ${name} prepaid package.` : `Szia! A(z) ${name} előrefizetős programcsomagot szeretném lefoglalni.`)}`
 
-  return <main className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-sky-50 pb-16 pt-24" ref={ref}>
+  return <main className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-sky-50 pb-16 pt-24">
     <section className="mx-auto max-w-[1200px] px-4 sm:px-6">
-      <div className={`mx-auto mb-10 max-w-3xl text-center transition-all duration-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'}`}>
+      <div className="mx-auto mb-10 max-w-3xl text-center">
         <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-sm font-bold text-amber-800"><Sparkles size={17} />{en ? 'Limited prepaid prices' : 'Korlátozott ideig elérhető előrefizetős árak'}</div>
         <h1 className="text-3xl font-black text-slate-900 sm:text-5xl">{en ? 'Hurghada excursion packages' : 'Hurghadai programcsomagok'}</h1>
         <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">{en ? 'Pay in advance, save more and choose your excursion dates later after you arrive.' : 'Fizess előre, spórolj többet, a programnapokat pedig válaszd ki később, akár már a megérkezésed után.'}</p>
@@ -34,10 +32,10 @@ export default function OffersSection() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        {packages.map((item, index) => {
+        {packages.map((item) => {
           const name = en ? item.nameEn : item.nameHu
           const programs = en ? item.programsEn : item.programsHu
-          return <article key={item.nameHu} className={`relative flex flex-col overflow-hidden rounded-3xl border-2 bg-white shadow-lg transition duration-300 hover:-translate-y-1 hover:shadow-xl ${item.featured ? 'border-sky-400' : 'border-white'} ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0'}`} style={{ transitionDelay: `${Math.min(index * 70, 350)}ms` }}>
+          return <article key={item.nameHu} className={`relative flex flex-col overflow-hidden rounded-3xl border-2 bg-white shadow-lg transition duration-300 hover:-translate-y-1 hover:shadow-xl ${item.featured ? 'border-sky-400' : 'border-white'}`}>
             <PackageCover images={item.images} name={name} oldPrice={item.oldPrice} price={item.price} en={en} />
             <div className="flex flex-1 flex-col p-5">
               <h2 className="text-xl font-black text-slate-900">{name}</h2>
