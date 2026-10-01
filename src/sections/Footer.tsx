@@ -11,7 +11,10 @@ export default function Footer() {
           <p className="text-[#94a3b8] text-sm mb-2">
             &copy; {new Date().getFullYear()} {language === 'en' ? 'Hurghada Excursions — All rights reserved.' : 'Hurghada Programok — Minden jog fenntartva.'}
           </p>
-          <Link to="/admin" className="mb-3 inline-block text-xs text-[#64748b] hover:text-white">Admin</Link>
+          <div className="mb-3 flex items-center justify-center gap-4 text-xs">
+            <Link to="/aszf" className="text-[#94a3b8] hover:text-white">{language === 'en' ? 'Terms' : 'ÁSZF'}</Link>
+            <Link to="/admin" className="text-[#64748b] hover:text-white">Admin</Link>
+          </div>
           <p className="text-[#64748b] text-xs flex items-center justify-center gap-1">
             Made with <Heart size={12} className="text-[#f43f5e] fill-current" /> for Hurghada travelers
           </p>
