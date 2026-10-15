@@ -25,11 +25,9 @@ export const programs: Program[] = [
     childPrice: '60€ (5–11 év)',
     image: '/images/luxor-kiralyok-volgye.jpg',
     tagline: 'Fedezd fel Luxor lenyűgöző világát egyetlen nap alatt – templomok, Nílus, fáraók.',
-    highlight: 'Karnak templom + Királyok Völgye + Hőlégballon opció',
+    highlight: 'Karnak templom + Királyok Völgye + Nílusi hajózás',
     duration: '04:00 – 22:00',
     availability: 'Minden nap',
-    hasBalloonOption: true,
-    balloonPrice: '105€',
     guideInfo: '15 fő felett magyar idegenvezető\nKisebb csoportnál angol / német / orosz nyelvű idegenvezetés',
     fullDescription: `Teljes napos luxori kirándulás Hurghadából, kényelmes transzferrel.
 
