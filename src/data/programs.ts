@@ -756,7 +756,7 @@ Fontos információk:
 – Lehetőség van kis állatokkal fotózkodni:
   • kis oroszlán
   • majom
-– A fotózás külön fizetendő: kb. 2–3 USD / fő`,
+– A kisállatokkal való fotóztatást egy különálló cég biztosítja, a szolgáltatás díját közvetlenül náluk, a helyszínen kell fizetni.`,
   },
   {
     id: 'super-safari',
@@ -815,7 +815,7 @@ Fontos információk:
 – Lehetőség van kis állatokkal fotózkodni:
   • kis oroszlán
   • majom
-– A fotózás külön fizetendő: kb. 2–3 USD / fő`,
+– A kisállatokkal való fotóztatást egy különálló cég biztosítja, a szolgáltatás díját közvetlenül náluk, a helyszínen kell fizetni.`,
   },
   {
     id: 'jeep-safari',
@@ -869,7 +869,7 @@ Fontos információk:
 – Lehetőség van kis állatokkal fotózkodni:
   • kis oroszlán
   • majom
-– A fotózás külön fizetendő: kb. 2–3 USD / fő`,
+– A kisállatokkal való fotóztatást egy különálló cég biztosítja, a szolgáltatás díját közvetlenül náluk, a helyszínen kell fizetni.`,
   },
   {
     id: 'batiskaf',
