@@ -1371,8 +1371,8 @@ Az ár nem tartalmazza:
     image: '/images/orange-bay-plus.jpg',
     tagline: 'Különleges egész napos tengeri program, amely az Orange Bay sziget élményét egy 45 perces batiskaf (félig tengeralattjáró) kirándulással és snorkelinggel kombinálja.',
     duration: '09:00 – 17:00',
-    availability: 'Hétfő • Szerda • Szombat',
-    highlight: '45 perc batiskaf + 3 óra Orange Bay + snorkeling + ebéd',
+    availability: 'Jelenleg nem elérhető',
+    highlight: 'JELENLEG NEM ELÉRHETŐ – 45 perc batiskaf + 3 óra Orange Bay + snorkeling + ebéd',
     fullDescription: `Orange Bay Plus – egy programban több vörös-tengeri élmény! 🏝️🐠
 
 
@@ -1414,6 +1414,48 @@ Az ár tartalmazza:
 – 1 snorkeling megálló korallzátonynál
 – Snorkeling felszerelés
 – Üdítő és víz`,
+  },
+
+  {
+    id: 'ozirea-vip',
+    name: 'Ozirea VIP – Prémium szigetprogram',
+    category: 'tengeri',
+    price: 75,
+    image: 'https://ozirea.com/assets/dayuse/dayuse_20260620_221948_3c539a.webp',
+    gallery: [
+      'https://ozirea.com/assets/dayuse/dayuse_20260620_221948_3c539a.webp',
+      'https://ozirea.com/assets/Restaurant/DSC01436.jpg',
+    ],
+    tagline: 'Prémium egész napos kikapcsolódás az Ozirea Islanden: tengerpart, medence, snorkeling és pihenés exkluzív környezetben.',
+    duration: 'Egész napos program',
+    availability: 'Minden nap',
+    highlight: 'Ozirea Island + medence + snorkeling + svédasztalos ebéd',
+    fullDescription: `Ozirea VIP – prémium szigetélmény a Vörös-tengeren. 🏝️✨
+
+A nap során hajóval érkeztek az Ozirea Islandre, ahol modern, igényesen kialakított környezet, tengerpart és medence vár.
+
+A program része egy snorkeling megálló is, ahol felfedezhetitek a Vörös-tenger korallzátonyait és színes tengeri élővilágát.
+
+A szigeten körülbelül 3 óra szabadidő áll rendelkezésre pihenésre, fürdésre, napozásra és a medence használatára.
+
+A programhoz svédasztalos ebéd tartozik, az étkezés alatt vízzel és üdítőkkel.
+
+A program minden nap indul.
+
+Ár: 75 € / fő
+
+A program tartalmazza:
+– Hotel–hotel transzfer Hurghada területén
+– Hajókirándulás oda-vissza
+– Belépés az Ozirea Islandre
+– Kb. 3 óra szabadidő a szigeten
+– Medencehasználat
+– Snorkeling megálló
+– Snorkeling felszerelés
+– Svédasztalos ebéd
+– Víz és üdítők az étkezés alatt
+
+A program sorrendje és a tengeri megállók az időjárás, illetve az aktuális tengeri körülmények függvényében változhatnak.`,
   },
 
 ];
