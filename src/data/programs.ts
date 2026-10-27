@@ -1371,8 +1371,8 @@ Az ár nem tartalmazza:
     image: '/images/orange-bay-plus.jpg',
     tagline: 'Különleges egész napos tengeri program, amely az Orange Bay sziget élményét egy 45 perces batiskaf (félig tengeralattjáró) kirándulással és snorkelinggel kombinálja.',
     duration: '09:00 – 17:00',
-    availability: 'Jelenleg nem elérhető',
-    highlight: 'JELENLEG NEM ELÉRHETŐ – 45 perc batiskaf + 3 óra Orange Bay + snorkeling + ebéd',
+    availability: 'Hétfő • Szerda • Szombat',
+    highlight: '45 perc batiskaf + 3 óra Orange Bay + snorkeling + ebéd',
     fullDescription: `Orange Bay Plus – egy programban több vörös-tengeri élmény! 🏝️🐠
 
 
