@@ -21,6 +21,10 @@ export default function OffersSection() {
 
   return <main className="min-h-screen bg-gradient-to-b from-amber-50 via-white to-sky-50 pb-16 pt-24">
     <section className="mx-auto max-w-[1200px] px-4 sm:px-6">
+      {!SHOW_PREPAID_PACKAGES && <header className="mx-auto mb-10 max-w-3xl text-center">
+        <h1 className="text-3xl font-black text-slate-900 sm:text-4xl">{en ? 'Hurghada excursion offers' : 'Hurghadai programajánlatok és kedvezmények'}</h1>
+        <p className="mt-4 text-slate-600">{en ? 'Explore our current offers and check the conditions below. Contact us on WhatsApp before booking.' : 'Nézd meg az aktuális ajánlatainkat és az alábbi feltételeket. Foglalás előtt egyeztess velünk WhatsAppon.'}</p>
+      </header>}
       {SHOW_PREPAID_PACKAGES && <>
       <div className="mx-auto mb-10 max-w-3xl text-center">
         <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-sm font-bold text-amber-800"><Sparkles size={17} />{en ? 'Limited prepaid prices' : 'Korlátozott ideig elérhető előrefizetős árak'}</div>

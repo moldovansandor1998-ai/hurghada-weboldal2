@@ -7,9 +7,12 @@ export type Language = 'hu' | 'en'
 const LanguageContext = createContext<{ language: Language; setLanguage: (language: Language) => void }>({ language: 'hu', setLanguage: () => undefined })
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>(() => localStorage.getItem('hurghada-language') === 'en' ? 'en' : 'hu')
+  const [language, setLanguage] = useState<Language>(() => {
+    try { return typeof localStorage !== 'undefined' && localStorage.getItem('hurghada-language') === 'en' ? 'en' : 'hu' }
+    catch { return 'hu' }
+  })
   useEffect(() => {
-    localStorage.setItem('hurghada-language', language)
+    try { localStorage.setItem('hurghada-language', language) } catch { /* Storage can be disabled by the browser. */ }
     document.documentElement.lang = language
   }, [language])
   return <LanguageContext.Provider value={{ language, setLanguage }}>{children}</LanguageContext.Provider>

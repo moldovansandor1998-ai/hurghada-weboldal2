@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { MessageCircle, Info, Clock, Calendar } from 'lucide-react';
 import type { Program } from '@/data/programs';
 import { WHATSAPP_NUMBER } from '@/data/programs';
@@ -5,11 +6,10 @@ import { localizeProgram, useLanguage } from '@/lib/i18n';
 
 interface ProgramCardProps {
   program: Program;
-  onDetails: (program: Program) => void;
   index: number;
 }
 
-export default function ProgramCard({ program, onDetails, index }: ProgramCardProps) {
+export default function ProgramCard({ program, index }: ProgramCardProps) {
   const { language } = useLanguage();
   const shown = localizeProgram(program, language);
   const en = language === 'en';
@@ -44,6 +44,10 @@ export default function ProgramCard({ program, onDetails, index }: ProgramCardPr
       <div className="relative aspect-[16/10] overflow-hidden">
         <img
           src={program.image}
+          loading="lazy"
+          decoding="async"
+          width={800}
+          height={500}
           alt={shown.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
@@ -102,13 +106,13 @@ export default function ProgramCard({ program, onDetails, index }: ProgramCardPr
 
         {/* Buttons */}
         <div className="flex flex-col gap-2 mt-auto">
-          <button
-            onClick={() => onDetails(program)}
+          <Link
+            to={`/program/${program.id}`}
             className="inline-flex items-center justify-center gap-1.5 text-[#0284c7] hover:text-white hover:bg-[#0284c7] font-medium text-sm py-2.5 transition-all border border-[#0284c7]/30 rounded-lg hover:border-[#0284c7]"
           >
             <Info size={16} />
             {en ? 'View details' : 'Részletek megtekintése'}
-          </button>
+          </Link>
           <a
             href={whatsappLink}
             target="_blank"

@@ -11,7 +11,12 @@ export default function Footer() {
           <p className="text-[#94a3b8] text-sm mb-2">
             &copy; {new Date().getFullYear()} {language === 'en' ? 'Hurghada Excursions — All rights reserved.' : 'Hurghada Programok — Minden jog fenntartva.'}
           </p>
-          <div className="mb-3 flex items-center justify-center gap-4 text-xs">
+          <div className="mb-3 flex flex-wrap items-center justify-center gap-4 text-xs">
+            <Link to="/programok" className="text-slate-300 hover:text-white">{language === 'en' ? 'Excursions' : 'Programok'}</Link>
+            <Link to="/blog" className="text-slate-300 hover:text-white">Blog</Link>
+            <Link to="/kapcsolat" className="text-slate-300 hover:text-white">{language === 'en' ? 'Contact' : 'Kapcsolat'}</Link>
+            <Link to="/fontos-informaciok" className="text-slate-300 hover:text-white">{language === 'en' ? 'Important information' : 'Fontos információk'}</Link>
+            <Link to="/aszf" className="text-slate-300 hover:text-white">{language === 'en' ? 'Terms' : 'ÁSZF'}</Link>
             <Link to="/admin" className="text-[#64748b] hover:text-white">Admin</Link>
           </div>
           <p className="text-[#64748b] text-xs flex items-center justify-center gap-1">

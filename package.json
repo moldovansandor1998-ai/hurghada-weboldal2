@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "check": "tsc -b",
     "format": "prettier --write .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:seo": "vitest run tests/seo/ && node --test scripts/check-seo-output.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -82,6 +83,7 @@
     "vite": "^7.2.4",
     "esbuild": "^0.27.2",
     "prettier": "^3.7.4",
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.16",
+    "jsdom": "^27.2.0"
   }
 }

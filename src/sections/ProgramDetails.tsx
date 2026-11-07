@@ -1,4 +1,5 @@
-import { X, MessageCircle, CreditCard, Ban, Clock, Calendar, Bus, AlertTriangle, Languages, Sparkles, Info } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft, MessageCircle, CreditCard, Ban, Clock, Calendar, Bus, AlertTriangle, Languages, Sparkles, Info } from 'lucide-react';
 import type { Program } from '@/data/programs';
 import { WHATSAPP_NUMBER, IMPORTANT_INFO } from '@/data/programs';
 import { localizeProgram, useLanguage } from '@/lib/i18n';
@@ -6,10 +7,9 @@ import GuestPhotoStrip from '@/components/GuestPhotoStrip';
 
 interface ProgramDetailsProps {
   program: Program | null;
-  onClose: () => void;
 }
 
-export default function ProgramDetails({ program, onClose }: ProgramDetailsProps) {
+export default function ProgramDetails({ program }: ProgramDetailsProps) {
   const { language } = useLanguage();
   if (!program) return null;
 
@@ -23,20 +23,13 @@ export default function ProgramDetails({ program, onClose }: ProgramDetailsProps
 
   return (
     <>
-      {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/50 z-50 backdrop-blur-sm" onClick={onClose} />
-
-      {/* Sheet */}
-      <div className="fixed right-0 top-0 h-full w-full sm:w-[520px] bg-[#fafafa] z-50 overflow-y-auto shadow-2xl animate-in slide-in-from-right duration-300">
-        
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-10 bg-white/90 hover:bg-white text-[#1e293b] p-2 rounded-full shadow-md transition-all hover:scale-110"
-        >
-          <X size={20} />
-        </button>
-
+      <main className="mx-auto max-w-[900px] px-4 pb-16 pt-24">
+        <nav aria-label={en ? 'Breadcrumb' : 'Navigációs útvonal'} className="mb-5 flex flex-wrap items-center gap-2 text-sm text-sky-700">
+          <Link to="/">{en ? 'Home' : 'Főoldal'}</Link><span aria-hidden="true">/</span>
+          <Link to="/programok">{en ? 'Excursions' : 'Programok'}</Link><span aria-hidden="true">/</span>
+          <span className="text-slate-600">{shown.name}</span>
+        </nav>
+        <div className="overflow-hidden rounded-2xl border bg-[#fafafa] shadow-sm">
         {/* Image */}
         <div className="relative h-52 sm:h-60">
           <img src={shown.image} alt={shown.name} className="w-full h-full object-cover" />
@@ -85,7 +78,7 @@ export default function ProgramDetails({ program, onClose }: ProgramDetailsProps
 
           {/* Title & Tagline */}
           <div>
-            <h2 className="text-[#1e293b] font-bold text-xl leading-snug">{shown.name}</h2>
+            <h1 className="text-[#1e293b] font-bold text-2xl sm:text-3xl leading-snug">{shown.name}</h1>
             <p className="text-[#64748b] text-sm mt-1.5 leading-relaxed">{shown.tagline}</p>
           </div>
 
@@ -319,7 +312,9 @@ export default function ProgramDetails({ program, onClose }: ProgramDetailsProps
             {en ? 'Book on WhatsApp' : 'Foglalás WhatsAppon'}
           </a>
         </div>
-      </div>
+        </div>
+        <Link to="/programok" className="mt-6 inline-flex items-center gap-2 font-semibold text-sky-700"><ArrowLeft size={18} />{en ? 'All excursions' : 'Összes program'}</Link>
+      </main>
     </>
   );
 }

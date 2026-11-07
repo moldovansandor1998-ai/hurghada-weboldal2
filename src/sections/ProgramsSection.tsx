@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Anchor, Sun, Landmark, Users, LayoutGrid } from 'lucide-react';
 import { programs, categories } from '@/data/programs';
 import ProgramCard from './ProgramCard';
@@ -13,7 +12,6 @@ const iconMap: Record<string, React.ElementType> = {
 };
 
 export default function ProgramsSection() {
-  const navigate = useNavigate();
   const { language } = useLanguage();
   const en = language === 'en';
   const [activeCategory, setActiveCategory] = useState<string>('all');
@@ -74,7 +72,6 @@ export default function ProgramsSection() {
             <ProgramCard
               key={program.id}
               program={program}
-              onDetails={(program) => navigate(`/program/${program.id}`)}
               index={idx}
             />
           ))}

@@ -1,28 +1,13 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, BookOpen } from 'lucide-react';
 import { blogPosts } from '@/data/blog';
+import NotFound from '@/pages/NotFound';
 
 export default function BlogDetail() {
-  const navigate = useNavigate();
   const { slug } = useParams<{ slug: string }>();
   const post = blogPosts.find((p) => p.slug === slug);
 
-  if (!post) {
-    return (
-      <section className="py-16 sm:py-20 bg-white min-h-screen">
-        <div className="max-w-[800px] mx-auto px-4 sm:px-6 text-center">
-          <h1 className="text-[#1e293b] font-bold text-2xl mb-4">Cikk nem található</h1>
-          <button
-            onClick={() => navigate('/blog')}
-            className="inline-flex items-center gap-2 text-[#0284c7] hover:text-[#0369a1] font-medium transition-colors"
-          >
-            <ArrowLeft size={18} />
-            Vissza a bloghoz
-          </button>
-        </div>
-      </section>
-    );
-  }
+  if (!post) return <NotFound />;
 
   // Parse content: split by double newlines for sections
   const sections = post.content.split('\n\n');
@@ -33,21 +18,19 @@ export default function BlogDetail() {
 
         {/* Back buttons */}
         <div className="flex items-center gap-3 mb-6">
-          <button
-            onClick={() => navigate('/')}
+          <Link to="/"
             className="inline-flex items-center gap-1.5 text-[#64748b] hover:text-[#0284c7] text-sm font-medium transition-colors"
           >
             <ArrowLeft size={16} />
             Főoldal
-          </button>
+          </Link>
           <span className="text-[#cbd5e1]">|</span>
-          <button
-            onClick={() => navigate('/blog')}
+          <Link to="/blog"
             className="inline-flex items-center gap-1.5 text-[#64748b] hover:text-[#0284c7] text-sm font-medium transition-colors"
           >
             <BookOpen size={16} />
             Blog
-          </button>
+          </Link>
         </div>
 
         {/* Article */}

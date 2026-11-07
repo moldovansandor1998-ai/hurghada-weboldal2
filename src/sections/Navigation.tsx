@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, BookOpen, Gift, AlertTriangle, Camera } from 'lucide-react';
 import { WHATSAPP_NUMBER } from '@/data/programs';
 import { useLanguage } from '@/lib/i18n';
@@ -8,10 +8,8 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
   const { language, setLanguage } = useLanguage();
   const en = language === 'en';
-  const isHomePage = location.pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,20 +18,6 @@ export default function Navigation() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const scrollToSection = (id: string) => {
-    if (!isHomePage) {
-      navigate('/');
-      setTimeout(() => {
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }, 300);
-    } else {
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsMobileMenuOpen(false);
-  };
 
   return (
     <nav
@@ -46,23 +30,20 @@ export default function Navigation() {
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <button
-            onClick={() => { navigate('/'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          <Link to="/" onClick={() => setIsMobileMenuOpen(false)}
             className="text-[#0284c7] font-bold text-xl tracking-tight hover:text-[#0369a1] transition-colors"
           >
             {en ? 'Hurghada Excursions' : 'Hurghada Programok'}
-          </button>
+          </Link>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-4">
-            <button
-              onClick={() => scrollToSection('programok')}
+            <Link to="/programok" onClick={() => setIsMobileMenuOpen(false)}
               className="text-[#1e293b] hover:text-[#0284c7] font-medium text-sm transition-colors"
             >
               {en ? 'Excursions' : 'Programok'}
-            </button>
-            <button
-              onClick={() => { navigate('/ajanlatok'); }}
+            </Link>
+            <Link to="/ajanlatok" onClick={() => setIsMobileMenuOpen(false)}
               className={`font-medium text-sm transition-colors inline-flex items-center gap-1 ${
                 location.pathname === '/ajanlatok'
                   ? 'text-[#0284c7]'
@@ -71,10 +52,9 @@ export default function Navigation() {
             >
               <Gift size={14} />
               {en ? 'Offers' : 'Ajánlatok'}
-            </button>
-            <button onClick={() => navigate('/vendegeink-fotoi')} className={`font-medium text-sm transition-colors inline-flex items-center gap-1 ${location.pathname==='/vendegeink-fotoi'?'text-[#0284c7]':'text-[#1e293b] hover:text-[#0284c7]'}`}><Camera size={14}/>{en?'Guest photos':'Vendégfotók'}</button>
-            <button
-              onClick={() => { navigate('/blog'); }}
+            </Link>
+            <Link to="/vendegeink-fotoi" className={`font-medium text-sm transition-colors inline-flex items-center gap-1 ${location.pathname==='/vendegeink-fotoi'?'text-[#0284c7]':'text-[#1e293b] hover:text-[#0284c7]'}`}><Camera size={14}/>{en?'Guest photos':'Vendégfotók'}</Link>
+            <Link to="/blog" onClick={() => setIsMobileMenuOpen(false)}
               className={`font-medium text-sm transition-colors inline-flex items-center gap-1 ${
                 location.pathname.startsWith('/blog')
                   ? 'text-[#0284c7]'
@@ -83,15 +63,13 @@ export default function Navigation() {
             >
               <BookOpen size={14} />
               Blog
-            </button>
-            <button
-              onClick={() => scrollToSection('kapcsolat')}
+            </Link>
+            <Link to="/kapcsolat" onClick={() => setIsMobileMenuOpen(false)}
               className={`font-medium text-sm transition-colors ${location.pathname === '/kapcsolat' ? 'text-[#0284c7]' : 'text-[#1e293b] hover:text-[#0284c7]'}`}
             >
               {en ? 'Contact' : 'Kapcsolat'}
-            </button>
-            <button
-              onClick={() => { navigate('/fontos-informaciok'); }}
+            </Link>
+            <Link to="/fontos-informaciok" onClick={() => setIsMobileMenuOpen(false)}
               className={`font-medium text-sm transition-colors inline-flex items-center gap-1 px-3 py-1.5 rounded-full ${
                 location.pathname === '/fontos-informaciok'
                   ? 'bg-[#f59e0b] text-white'
@@ -100,7 +78,7 @@ export default function Navigation() {
             >
               <AlertTriangle size={14} />
               {en ? 'Important info' : 'Fontos infók'}
-            </button>
+            </Link>
             <a
               href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
               target="_blank"
@@ -138,14 +116,12 @@ export default function Navigation() {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
           <div className="px-4 py-4 space-y-3">
-            <button
-              onClick={() => scrollToSection('programok')}
+            <Link to="/programok" onClick={() => setIsMobileMenuOpen(false)}
               className="block w-full text-left text-[#1e293b] hover:text-[#0284c7] font-medium py-2 transition-colors"
             >
               {en ? 'Excursions' : 'Programok'}
-            </button>
-            <button
-              onClick={() => { navigate('/ajanlatok'); setIsMobileMenuOpen(false); }}
+            </Link>
+            <Link to="/ajanlatok" onClick={() => setIsMobileMenuOpen(false)}
               className={`block w-full text-left font-medium py-2 transition-colors inline-flex items-center gap-2 ${
                 location.pathname === '/ajanlatok'
                   ? 'text-[#0284c7]'
@@ -154,10 +130,9 @@ export default function Navigation() {
             >
               <Gift size={16} />
               {en ? 'Offers' : 'Ajánlatok'}
-            </button>
-            <button onClick={() => { navigate('/vendegeink-fotoi'); setIsMobileMenuOpen(false); }} className="block w-full text-left font-medium py-2 inline-flex items-center gap-2 text-[#1e293b]"><Camera size={16}/>{en?'Guest photos':'Vendégfotók'}</button>
-            <button
-              onClick={() => { navigate('/blog'); setIsMobileMenuOpen(false); }}
+            </Link>
+            <Link to="/vendegeink-fotoi" onClick={() => setIsMobileMenuOpen(false)} className="block w-full text-left font-medium py-2 inline-flex items-center gap-2 text-[#1e293b]"><Camera size={16}/>{en?'Guest photos':'Vendégfotók'}</Link>
+            <Link to="/blog" onClick={() => setIsMobileMenuOpen(false)}
               className={`block w-full text-left font-medium py-2 transition-colors inline-flex items-center gap-2 ${
                 location.pathname.startsWith('/blog')
                   ? 'text-[#0284c7]'
@@ -166,15 +141,13 @@ export default function Navigation() {
             >
               <BookOpen size={16} />
               Blog
-            </button>
-            <button
-              onClick={() => scrollToSection('kapcsolat')}
+            </Link>
+            <Link to="/kapcsolat" onClick={() => setIsMobileMenuOpen(false)}
               className={`block w-full text-left font-medium py-2 transition-colors ${location.pathname === '/kapcsolat' ? 'text-[#0284c7]' : 'text-[#1e293b] hover:text-[#0284c7]'}`}
             >
               {en ? 'Contact' : 'Kapcsolat'}
-            </button>
-            <button
-              onClick={() => { navigate('/fontos-informaciok'); setIsMobileMenuOpen(false); }}
+            </Link>
+            <Link to="/fontos-informaciok" onClick={() => setIsMobileMenuOpen(false)}
               className={`block w-full text-left font-medium py-2 transition-colors inline-flex items-center gap-2 px-3 rounded-lg ${
                 location.pathname === '/fontos-informaciok'
                   ? 'bg-[#f59e0b] text-white'
@@ -183,7 +156,7 @@ export default function Navigation() {
             >
               <AlertTriangle size={16} />
               {en ? 'Important info' : 'Fontos infók'}
-            </button>
+            </Link>
             <a
               href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
               target="_blank"
