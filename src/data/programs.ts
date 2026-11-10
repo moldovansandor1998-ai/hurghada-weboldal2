@@ -1458,6 +1458,48 @@ A program tartalmazza:
 A program sorrendje és a tengeri megállók az időjárás, illetve az aktuális tengeri körülmények függvényében változhatnak.`,
   },
 
+  {
+    id: 'dolphin-house-scuba-diving',
+    name: 'Dolphin House + Scuba Diving (1 merülés)',
+    category: 'tengeri',
+    price: 60,
+    image: '/images/dolphins.jpg',
+    tagline: 'Delfinek a természetes élőhelyükön és egy búvármerülés profi oktató kíséretében – két különleges vörös-tengeri élmény egy programban.',
+    duration: '08:00 – 16:00',
+    availability: 'Vasárnap • Kedd • Péntek',
+    highlight: 'Dolphin House + 1 scuba diving merülés + ebéd + italok',
+    fullDescription: `ÚJ PROGRAM HURGHADÁBÓL! 🐬🤿
+
+Dolphin House + Scuba Diving – egyetlen nap alatt találkozhatsz a Vörös-tenger vadon élő delfinjeivel, és kipróbálhatod a búvárkodást is egy professzionális oktató kíséretében.
+
+A program reggel indul, majd hajóval kihajózunk a gyönyörű Vörös-tengerre. Felkeressük a Dolphin House területét, amely a vadon élő delfinek természetes élőhelye. Itt lehetőség nyílhat arra, hogy természetes környezetükben figyeld meg őket.
+
+A nap egyik különleges része egy scuba diving merülés. A merülés során professzionális búvároktató kísér, így biztonságosan fedezheted fel a Vörös-tenger víz alatti világát.
+
+A program során jut idő úszásra, pihenésre és a hajó fedélzetén való kikapcsolódásra is.
+
+Ebédet a hajón szolgálnak fel, az italok pedig benne vannak az árban.
+
+📅 Indulási napok: vasárnap, kedd és péntek
+🕗 Időtartam: 08:00 – 16:00
+💰 Ár: 60 / fő
+
+Az ár tartalmazza:
+– Hajókirándulás a Vörös-tengeren
+– Dolphin House meglátogatása
+– Lehetőség vadon élő delfinek megfigyelésére
+– 1 scuba diving merülés
+– Professzionális búvároktató
+– Búvárfelszerelés
+– Úszási és pihenési lehetőség
+– Ebéd a hajón
+– Italok
+
+Fontos: a delfinek vadon élő állatok, ezért a megfigyelésük vagy közelségük nem garantálható.
+
+A program sorrendje az időjárási és tengeri körülmények függvényében változhat.`,
+  },
+
 ];
 
 export const categories = [
